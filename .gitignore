@@ -16,6 +16,12 @@ Thumbs.db
 # Vite cache
 .vite/
 
+# Vite cache
+.vite
+# o si está dentro de node_modules:
+node_modules/.vite
+
+
 # Env files
 .env
 .env.local
