@@ -1,4 +1,4 @@
-import './Register.css';
+import "./Register.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
@@ -25,6 +25,7 @@ export default function Register() {
     }
   };
 
+  //segun mi pc si jala
   return (
     <Layout>
       <div className="register-container">
