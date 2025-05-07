@@ -1,0 +1,136 @@
+.profile-container {
+    position: relative;
+    min-height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    overflow: hidden;
+  
+    background: linear-gradient(
+      135deg,
+      #0f172a 0%,
+      #1e3a8a 15%,
+      #3b82f6 35%,
+      #06b6d4 55%,
+      #6366f1 75%,
+      #1e1b4b 100%
+    );
+  }
+  
+  
+  .profile-box {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    padding: 2.5rem;
+    border-radius: 1.25rem;
+  
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.25);
+  
+    animation: fadeInUp 0.7s ease-out;
+    color: #f1f5f9;
+  }
+  
+  
+  .profile-title {
+    text-align: center;
+    color: #e0e7ff;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+  }
+  
+  .profile-field {
+    margin-bottom: 1.25rem;
+  }
+  
+  .profile-field label {
+    display: block;
+    color: #cbd5e1;
+    font-size: 0.875rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .profile-input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #f1f5f9;
+    font-size: 1rem;
+  }
+  
+  .profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  
+  .profile-button-save {
+    background-color: #3b82f6;
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    border: none;
+  }
+  
+  .profile-button-save:hover {
+    background-color: #2563eb;
+  }
+  
+  .profile-button-logout {
+    background-color: #ef4444;
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    border: none;
+  }
+  
+  .profile-button-logout:hover {
+    background-color: #dc2626;
+  }
+  
+  .profile-text {
+    color: #f1f5f9;
+    font-size: 1rem;
+    margin-top: 0.25rem;
+  }
+  
+
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .profile-error {
+    color: #ef4444;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .profile-loading {
+    color: #facc15;
+    text-align: center;
+    font-weight: bold;
+  }
+  

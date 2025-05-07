@@ -1,6 +1,8 @@
+import './Login.css';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/axiosConfig"; // Importa el cliente Axios configurado
+import Layout from "../components/Layout";
+import api from "../api/axiosConfig";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -12,58 +14,57 @@ export default function Login() {
     try {
       const response = await api.post("/auth/login", {
         email,
-        contraseña: password, // La API espera "contraseña" en lugar de "password"
+        contraseña: password, // la API espera 'contraseña'
       });
 
       const { access_token } = response.data;
-      localStorage.setItem("token", access_token); // Guarda el token en el almacenamiento local
-      navigate("/profile"); // Redirige al perfil
+      localStorage.setItem("token", access_token);
+      navigate("/profile");
     } catch (err) {
       setError("Credenciales inválidas. Por favor, inténtalo de nuevo.");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-      <div className="bg-[#1a1a1a] p-8 rounded-xl shadow-xl w-full max-w-md text-white">
-        <h2 className="text-3xl font-bold mb-6 text-center text-yellow-400">
-          Iniciar sesión
-        </h2>
+    <Layout>
+      <div className="login-container">
+        <div className="login-box">
+          <h1 className="login-title">Iniciar sesión</h1>
 
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+          {error && <p className="login-error">{error}</p>}
 
-        <input
-          type="email"
-          placeholder="Correo electrónico"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-3 mb-4 rounded bg-gray-800 border border-gray-600 placeholder-gray-400 text-white"
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-3 mb-6 rounded bg-gray-800 border border-gray-600 placeholder-gray-400 text-white"
-        />
+          <form className="login-form" onSubmit={(e) => e.preventDefault()}>
+            <label>Correo electrónico</label>
+            <input
+              type="email"
+              className="login-input"
+              placeholder="ejemplo@correo.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-        <button
-          onClick={handleLogin}
-          className="w-full bg-yellow-400 hover:bg-yellow-500 transition-all text-black font-semibold py-3 rounded shadow-md"
-        >
-          Entrar
-        </button>
+            <label>Contraseña</label>
+            <input
+              type="password"
+              className="login-input"
+              placeholder="********"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-        <p className="text-center mt-6 text-sm text-gray-400">
-          ¿No tienes cuenta?
-          <span
-            onClick={() => navigate("/register")}
-            className="text-yellow-400 cursor-pointer ml-1 hover:underline"
-          >
-            Regístrate
-          </span>
-        </p>
+            <button className="login-button" onClick={handleLogin}>
+              Entrar
+            </button>
+          </form>
+
+          <p className="login-link-text">
+            ¿No tenés cuenta?{" "}
+            <span className="login-link" onClick={() => navigate("/register")}>
+              Registrate
+            </span>
+          </p>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 }

@@ -1,6 +1,8 @@
+import './Register.css';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/axiosConfig"; // Importa el cliente Axios configurado
+import Layout from "../components/Layout";
+import api from "../api/axiosConfig";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -14,63 +16,64 @@ export default function Register() {
       await api.post("/auth/register", {
         nombre,
         email,
-        contraseña: password, // La API espera "contraseña" en lugar de "password"
+        contraseña: password, // según lo que espera tu backend
       });
 
-      navigate("/login"); // Redirige al login después del registro exitoso
+      navigate("/login");
     } catch (err) {
-      setError("Error al registrar. Por favor, inténtalo de nuevo.");
+      setError("Error al registrar. Por favor, intentá de nuevo.");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
-      <div className="bg-[#1a1a1a] p-8 rounded-xl shadow-xl w-full max-w-md text-white">
-        <h2 className="text-3xl font-bold mb-6 text-center text-yellow-400">
-          Crear cuenta
-        </h2>
+    <Layout>
+      <div className="register-container">
+        <div className="register-box">
+          <h1 className="register-title">Crear cuenta</h1>
 
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+          {error && <p className="register-error">{error}</p>}
 
-        <input
-          type="text"
-          placeholder="Nombre de usuario"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          className="w-full p-3 mb-4 rounded bg-gray-800 border border-gray-600 placeholder-gray-400 text-white"
-        />
-        <input
-          type="email"
-          placeholder="Correo electrónico"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-3 mb-4 rounded bg-gray-800 border border-gray-600 placeholder-gray-400 text-white"
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-3 mb-6 rounded bg-gray-800 border border-gray-600 placeholder-gray-400 text-white"
-        />
+          <form className="register-form" onSubmit={(e) => e.preventDefault()}>
+            <label>Nombre de usuario</label>
+            <input
+              type="text"
+              placeholder="Tu usuario"
+              className="register-input"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+            />
 
-        <button
-          onClick={handleRegister}
-          className="w-full bg-yellow-400 hover:bg-yellow-500 transition-all text-black font-semibold py-3 rounded shadow-md"
-        >
-          Registrarse
-        </button>
+            <label>Correo electrónico</label>
+            <input
+              type="email"
+              placeholder="ejemplo@correo.com"
+              className="register-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-        <p className="text-center mt-6 text-sm text-gray-400">
-          ¿Ya tienes una cuenta?
-          <span
-            onClick={() => navigate("/login")}
-            className="text-yellow-400 cursor-pointer ml-1 hover:underline"
-          >
-            Inicia sesión
-          </span>
-        </p>
+            <label>Contraseña</label>
+            <input
+              type="password"
+              placeholder="********"
+              className="register-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+
+            <button className="register-button" onClick={handleRegister}>
+              Registrarse
+            </button>
+          </form>
+
+          <p className="register-link-text">
+            ¿Ya tenés cuenta?{" "}
+            <span className="register-link" onClick={() => navigate("/login")}>
+              Iniciá sesión
+            </span>
+          </p>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 }
