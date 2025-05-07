@@ -1,8 +1,8 @@
 import './Profile.css';
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Layout from "../components/Layout";
-import api from "../api/axiosConfig";
+import Layout from "../../components/Layout";
+import api from "../../api/axiosConfig";
 
 export default function Profile() {
   const navigate = useNavigate();

@@ -1,8 +1,8 @@
 import './Login.css';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Layout from "../components/Layout";
-import api from "../api/axiosConfig";
+import Layout from "../../components/Layout";
+import api from "../../api/axiosConfig";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ export default function Login() {
 
       const { access_token } = response.data;
       localStorage.setItem("token", access_token);
-      navigate("/profile");
+      navigate("/home");
     } catch (err) {
       setError("Credenciales inválidas. Por favor, inténtalo de nuevo.");
     }

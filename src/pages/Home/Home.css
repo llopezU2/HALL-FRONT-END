@@ -1,0 +1,185 @@
+/* HOME GENERAL */
+.home-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+/* HERO CON IMAGEN DE FONDO */
+.home-hero {
+  position: relative;
+  height: 90vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.hero-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* SUPERPOSICIÓN + CONTENIDO */
+.hero-overlay {
+  position: relative;
+  z-index: 2;
+  padding: 2rem;
+  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 1) 70%);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+/* CONTENIDO DENTRO DEL HERO */
+.hero-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+/* PROMO PRINCIPAL */
+.promo-box {
+  color: white;
+  max-width: 60%;
+}
+
+.promo-etiqueta {
+  background-color: #60a5fa;
+  padding: 0.3rem 0.8rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.promo-fecha {
+  display: block;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  margin-bottom: 1rem;
+}
+
+.promo-titulo {
+  font-size: 2.3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  line-height: 1.3;
+}
+
+.promo-precio {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.promo-descuento {
+  background-color: #ef4444;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.3rem;
+  font-weight: bold;
+}
+
+.promo-valor {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #facc15;
+}
+
+/* SIDEBAR DE RECOMENDADOS */
+.sidebar-box {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-left: 4px solid #60a5fa;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  color: white;
+  min-width: 220px;
+}
+
+.sidebar-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 0.4rem;
+}
+
+.sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-list li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.5rem;
+  position: relative;
+}
+
+
+
+/* CURVA DECORATIVA */
+.curved-divider {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  background: #0f172a;
+  border-top-left-radius: 100% 30%;
+  border-top-right-radius: 100% 30%;
+  z-index: 1;
+}
+
+/* SECCIÓN POSTERIOR */
+.home-body {
+  background-color: #0f172a;
+  padding: 3rem 2rem;
+  color: white;
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .hero-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .promo-box {
+    max-width: 100%;
+  }
+
+  .sidebar-box {
+    margin-top: 2rem;
+    width: 100%;
+  }
+}
+
+.styled-buy-button {
+  background-color: #3b82f6;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.styled-buy-button:hover {
+  background-color: #2563eb;
+}

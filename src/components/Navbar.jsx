@@ -15,7 +15,7 @@ export default function Navbar() {
   const [searchTerm, setSearchTerm] = useState('');
   const searchRef = useRef(null);
 
-  const isProfileView = location.pathname === "/profile";
+  const isUserView = location.pathname === "/profile" || location.pathname === "/home"|| location.pathname === "/solicitudes";
 
   const handleLogout = () => {
     auth.logout();
@@ -58,141 +58,150 @@ export default function Navbar() {
   return (
     <div className='navbar-wrapper'>
 
-<>
-      <nav className="navbar">
-        {/* Logo y título */}
-        <div className="navbar-left">
-          <img src={logo} alt="Logo HALLGRANDE" className="navbar-img" />
-          <Link to="/" className="navbar-name">HALL</Link>
-        </div>
+      <>
+        <nav className="navbar">
+          {/* Logo y título */}
+          <div className="navbar-left">
+            <img src={logo} alt="Logo HALLGRANDE" className="navbar-img" />
+            <Link to="/" className="navbar-name">HALL</Link>
+          </div>
 
-        {/* Escritorio: plataformas + buscador embebido */}
-        {!isMobile && (
-          <div className="navbar-center">
-            <div className="platforms">
-              <Link to="/plataforma/playstation" className="platform">
-                <i className="fab fa-playstation"></i> PlayStation
-              </Link>
-              <Link to="/plataforma/xbox" className="platform">
-                <i className="fab fa-xbox"></i> Xbox
-              </Link>
-              <Link to="/plataforma/nintendo" className="platform">
-                <i className="fas fa-gamepad"></i> Nintendo
-              </Link>
-              <Link to="/plataforma/pc" className="platform">
-                <i className="fas fa-desktop"></i> PC
-              </Link>
+          {/* Escritorio: plataformas + buscador embebido */}
+          {!isMobile && (
+            <div className="navbar-center">
+              <div className="platforms">
+                <Link to="/plataforma/playstation" className="platform">
+                  <i className="fab fa-playstation"></i> PlayStation
+                </Link>
+                <Link to="/plataforma/xbox" className="platform">
+                  <i className="fab fa-xbox"></i> Xbox
+                </Link>
+                <Link to="/plataforma/nintendo" className="platform">
+                  <i className="fas fa-gamepad"></i> Nintendo
+                </Link>
+                <Link to="/plataforma/pc" className="platform">
+                  <i className="fas fa-desktop"></i> PC
+                </Link>
+              </div>
+
+              <div className="search-wrapper" ref={searchRef}>
+                <button className="search-toggle" onClick={toggleSearch}>
+                  {isSearchOpen ? (
+                    <i className="fas fa-times"></i>
+                  ) : (
+                    <i className="fas fa-search"></i>
+                  )}
+                </button>
+                <input
+                  type="text"
+                  className={`navbar-search-input ${isSearchOpen ? 'visible' : ''}`}
+                  placeholder="Buscar juegos, plataformas..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
             </div>
+          )}
 
-            <div className="search-wrapper" ref={searchRef}>
+          {/* Derecha: siempre visible */}
+          <div className="navbar-right">
+            {/* Lupa móvil */}
+            {isMobile && (
               <button className="search-toggle" onClick={toggleSearch}>
-                {isSearchOpen ? (
-                  <i className="fas fa-times"></i>
-                ) : (
-                  <i className="fas fa-search"></i>
-                )}
+                <i className="fas fa-search"></i>
+              </button>
+            )}
+
+            {/* Menú hamburguesa móvil */}
+            {isMobile && (
+              <button className="menu-toggle" onClick={toggleMenu}>
+                <i className="fas fa-bars"></i>
+              </button>
+
+            )}
+
+            {/* Ícono de perfil solo en /profile */}
+            {isUserView && (
+              <Link to="/profile" className="navbar-link">
+                <i className="fas fa-user-circle"></i>
+              </Link>
+            )}
+
+            {isUserView && (
+              <Link to="/solicitudes" className="navbar-link">
+                <i className="fas fa-user-friends"></i>
+              </Link>
+            )}
+
+
+
+
+            {!isMobile && isUserView && isAuth && (
+              <button onClick={handleLogout} className="navbar-button-logout">
+                Cerrar sesión
+              </button>
+            )}
+
+
+
+          </div>
+        </nav>
+
+        {/* Modal buscador móvil */}
+        {isSearchOpen && isMobile && (
+          <div className="search-modal" onClick={() => setIsSearchOpen(false)}>
+            <div className="search-modal-content" onClick={(e) => e.stopPropagation()}>
+              <button className="search-close" onClick={() => setIsSearchOpen(false)}>
+                <i className="fas fa-times"></i>
               </button>
               <input
                 type="text"
-                className={`navbar-search-input ${isSearchOpen ? 'visible' : ''}`}
+                className="search-modal-input"
                 placeholder="Buscar juegos, plataformas..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                autoFocus
               />
             </div>
           </div>
         )}
 
-        {/* Derecha: siempre visible */}
-        <div className="navbar-right">
-          {/* Lupa móvil */}
-          {isMobile && (
-            <button className="search-toggle" onClick={toggleSearch}>
-              <i className="fas fa-search"></i>
-            </button>
-          )}
-
-          {/* Menú hamburguesa móvil */}
-          {isMobile && (
-            <button className="menu-toggle" onClick={toggleMenu}>
-              <i className="fas fa-bars"></i>
-            </button>
-
-          )}
-
-          {/* Ícono de perfil solo en /profile */}
-          {isProfileView && (
-            <Link to="/profile" className="navbar-link">
-              <i className="fas fa-user-circle"></i>
-            </Link>
-          )}
-
-          {/* Escritorio: cerrar sesión solo en profile */}
-          {!isMobile && isProfileView && isAuth && (
-            <button onClick={handleLogout} className="navbar-button-logout">
-              Cerrar sesión
-            </button>
-          )}
-
-
-        </div>
-      </nav>
-
-      {/* Modal buscador móvil */}
-      {isSearchOpen && isMobile && (
-        <div className="search-modal" onClick={() => setIsSearchOpen(false)}>
-          <div className="search-modal-content" onClick={(e) => e.stopPropagation()}>
-            <button className="search-close" onClick={() => setIsSearchOpen(false)}>
-              <i className="fas fa-times"></i>
-            </button>
-            <input
-              type="text"
-              className="search-modal-input"
-              placeholder="Buscar juegos, plataformas..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              autoFocus
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Menú hamburguesa móvil */}
-      {isMobile && isMenuOpen && (
-        <div className="mobile-menu">
-          <ul className="mobile-menu-list">
-            <li>
-              <Link to="/plataforma/playstation" className="platform" onClick={() => setIsMenuOpen(false)}>
-                <i className="fab fa-playstation"></i> PlayStation
-              </Link>
-            </li>
-            <li>
-              <Link to="/plataforma/xbox" className="platform" onClick={() => setIsMenuOpen(false)}>
-                <i className="fab fa-xbox"></i> Xbox
-              </Link>
-            </li>
-            <li>
-              <Link to="/plataforma/nintendo" className="platform" onClick={() => setIsMenuOpen(false)}>
-                <i className="fas fa-gamepad"></i> Nintendo
-              </Link>
-            </li>
-            <li>
-              <Link to="/plataforma/pc" className="platform" onClick={() => setIsMenuOpen(false)}>
-                <i className="fas fa-desktop"></i> PC
-              </Link>
-            </li>
-            {isProfileView && (
+        {/* Menú hamburguesa móvil */}
+        {isMobile && isMenuOpen && (
+          <div className="mobile-menu">
+            <ul className="mobile-menu-list">
               <li>
-                <button className="logout-button" onClick={handleLogout}>
-                  <i className="fas fa-sign-out-alt"></i> Cerrar sesión
-                </button>
+                <Link to="/plataforma/playstation" className="platform" onClick={() => setIsMenuOpen(false)}>
+                  <i className="fab fa-playstation"></i> PlayStation
+                </Link>
               </li>
-            )}
-          </ul>
-        </div>
-      )}
+              <li>
+                <Link to="/plataforma/xbox" className="platform" onClick={() => setIsMenuOpen(false)}>
+                  <i className="fab fa-xbox"></i> Xbox
+                </Link>
+              </li>
+              <li>
+                <Link to="/plataforma/nintendo" className="platform" onClick={() => setIsMenuOpen(false)}>
+                  <i className="fas fa-gamepad"></i> Nintendo
+                </Link>
+              </li>
+              <li>
+                <Link to="/plataforma/pc" className="platform" onClick={() => setIsMenuOpen(false)}>
+                  <i className="fas fa-desktop"></i> PC
+                </Link>
+              </li>
+              {isProfileView && (
+                <li>
+                  <button className="logout-button" onClick={handleLogout}>
+                    <i className="fas fa-sign-out-alt"></i> Cerrar sesión
+                  </button>
+                </li>
+              )}
+            </ul>
+          </div>
+        )}
 
-    </>
+      </>
 
     </div>
   );
