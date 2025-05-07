@@ -1,4 +1,4 @@
-import './Login.css';
+import "./Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "../../components/Layout";
@@ -14,11 +14,18 @@ export default function Login() {
     try {
       const response = await api.post("/auth/login", {
         email,
-        contraseña: password, // la API espera 'contraseña'
+        contraseña: password,
       });
 
       const { access_token } = response.data;
+      // 1) Guardamos el token
       localStorage.setItem("token", access_token);
+      // 2) Inyectamos el header para las siguientes peticiones
+      api.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
+      // 3) Recuperamos el profile para extraer el userId
+      const profile = await api.get("/auth/profile");
+      localStorage.setItem("user", JSON.stringify(profile.data));
+
       navigate("/home");
     } catch (err) {
       setError("Credenciales inválidas. Por favor, inténtalo de nuevo.");

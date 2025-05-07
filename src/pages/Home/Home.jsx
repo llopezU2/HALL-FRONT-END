@@ -19,9 +19,10 @@ export default function Home() {
       }
     };
 
+    //recomendados
     const fetchRecomendados = async () => {
       try {
-        const response = await api.get("/recomendados");
+        const response = await api.get("/auth/recomendados");
         setRecomendados(response.data);
       } catch (error) {
         console.error("Error al cargar recomendados:", error);
@@ -32,13 +33,28 @@ export default function Home() {
     fetchRecomendados();
   }, []);
 
-  const handleAgregarAmigo = async (id_usuario) => {
+  const handleAgregarAmigo = async (id_usuario_receptor) => {
     try {
-      await api.post("/amistades", { id_usuario });
+      // Obtener el usuario actual desde el localStorage
+      const usuarioActual = JSON.parse(localStorage.getItem("user"));
+
+      // Validar que exista usuario actual
+      if (!usuarioActual || !usuarioActual.id_usuario) {
+        alert("No se ha iniciado sesión correctamente.");
+        return;
+      }
+
+      // Enviar solicitud al backend
+      await api.post("/solicitud", {
+        id_solicitante: usuarioActual.id_usuario,
+        id_receptor: id_usuario_receptor,
+      });
+
       alert("Solicitud enviada correctamente");
       setModalUsuario(null);
     } catch (error) {
       console.error("Error al enviar solicitud:", error);
+      alert("No se pudo enviar la solicitud.");
     }
   };
 
@@ -53,11 +69,14 @@ export default function Home() {
                 <span className="promo-etiqueta">Reserva</span>
                 <span className="promo-fecha">
                   {promocion
-                    ? new Date(promocion.fecha_inicio).toLocaleDateString("es-ES", {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric",
-                      })
+                    ? new Date(promocion.fecha_inicio).toLocaleDateString(
+                        "es-ES",
+                        {
+                          day: "2-digit",
+                          month: "long",
+                          year: "numeric",
+                        }
+                      )
                     : "14 Julio 2025"}
                 </span>
                 <h1 className="promo-titulo">
@@ -66,30 +85,43 @@ export default function Home() {
                     : "Título del juego"}
                 </h1>
                 <p className="promo-descripcion">
-                  {promocion ? promocion.regalo_evento.juego.descripcion : "Descripción del juego..."}
+                  {promocion
+                    ? promocion.regalo_evento.juego.descripcion
+                    : "Descripción del juego..."}
                 </p>
                 <p className="promo-categoria">
-                  {promocion ? promocion.regalo_evento.juego.categoria.nombre : "Categoría"}
+                  {promocion
+                    ? promocion.regalo_evento.juego.categoria.nombre
+                    : "Categoría"}
                 </p>
                 <div className="promo-precio">
                   <span className="promo-valor">
-                    {promocion ? `${promocion.regalo_evento.juego.precio} €` : "75.89€"}
+                    {promocion
+                      ? `${promocion.regalo_evento.juego.precio} €`
+                      : "75.89€"}
                   </span>
                 </div>
                 <button className="styled-buy-button">Comprar</button>
               </div>
 
               <div className="sidebar-box">
-                <h3 className="sidebar-title">Recomendados</h3>
+                <h3 className="sidebar-title">Usuarios Recomendados</h3>
                 <ul className="sidebar-list">
                   {recomendados.length > 0 ? (
                     recomendados.map((user) => (
-                      <li
-                        key={user.id_usuario}
-                        className="recomendado-item"
-                        onClick={() => setModalUsuario(user)}
-                      >
-                        {user.nombre}
+                      <li key={user.id_usuario} className="recomendado-item">
+                        <button
+                          className="recomendado-button"
+                          onClick={() => {
+                            console.log(
+                              "ModalUsuario se va a setear con:",
+                              user
+                            );
+                            setModalUsuario(user);
+                          }}
+                        >
+                          {user.nombre}
+                        </button>
                       </li>
                     ))
                   ) : (
@@ -111,11 +143,20 @@ export default function Home() {
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
               <h2>{modalUsuario.nombre}</h2>
               <p>Email: {modalUsuario.email}</p>
-              <p>Rol: {modalUsuario.rol?.nombre}</p>
-              <button onClick={() => handleAgregarAmigo(modalUsuario.id_usuario)}>
-                Agregar como amigo
-              </button>
-              <button onClick={() => setModalUsuario(null)}>Cerrar</button>
+              <div className="modal-buttons">
+                <button
+                  className="btn-add"
+                  onClick={() => handleAgregarAmigo(modalUsuario.id_usuario)}
+                >
+                  Agregar como amigo
+                </button>
+                <button
+                  className="btn-close"
+                  onClick={() => setModalUsuario(null)}
+                >
+                  Cerrar
+                </button>
+              </div>
             </div>
           </div>
         )}

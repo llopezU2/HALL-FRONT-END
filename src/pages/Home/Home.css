@@ -1,7 +1,7 @@
 /* HOME GENERAL */
 .home-container {
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* HERO CON IMAGEN DE FONDO */
@@ -30,7 +30,11 @@
   position: relative;
   z-index: 2;
   padding: 2rem;
-  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 1) 70%);
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 23, 42, 0.2),
+    rgba(15, 23, 42, 1) 70%
+  );
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -123,8 +127,6 @@
   position: relative;
 }
 
-
-
 /* CURVA DECORATIVA */
 .curved-divider {
   position: absolute;
@@ -182,4 +184,123 @@
 
 .styled-buy-button:hover {
   background-color: #2563eb;
+}
+
+/* MODAL */
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex; /* centra el contenido */
+  justify-content: center;
+  align-items: center;
+  z-index: 10000; /* por encima de todo */
+}
+
+.modal-content {
+  background: rgba(15, 23, 42, 0.95); /* oscuro, en línea con .home-body */
+  color: white;
+  padding: 2rem;
+  border-radius: 0.5rem; /* igual que .promo-etiqueta */
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.modal-buttons .btn-add,
+.modal-buttons .btn-close {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* “Agregar como amigo” */
+.modal-buttons .btn-add {
+  background-color: #3b82f6; /* mismo que .styled-buy-button */
+  color: white;
+}
+
+.modal-buttons .btn-add:hover {
+  background-color: #2563eb;
+}
+
+/* “Cerrar” */
+.modal-buttons .btn-close {
+  background-color: #ef4444;
+  color: white;
+}
+
+.modal-buttons .btn-close:hover {
+  background-color: #dc2626;
+}
+
+/* BOTONES DEL MODAL */
+.modal-buttons .btn-add,
+.modal-buttons .btn-close {
+  all: unset; /* elimina estilos por defecto */
+  display: inline-block; /* para poder darles padding y margin */
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem; /* coincide con tu estilo general */
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+/* Estilo para “Agregar como amigo” */
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.modal-buttons .btn-add,
+.modal-buttons .btn-close {
+  all: unset;
+  display: inline-block;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.modal-buttons .btn-add {
+  background-color: #3b82f6;
+  color: #fff;
+}
+
+.modal-buttons .btn-add:hover {
+  background-color: #2563eb;
+}
+
+.modal-buttons .btn-close {
+  background-color: #ef4444;
+  color: #fff;
+}
+
+.modal-buttons .btn-close:hover {
+  background-color: #dc2626;
 }
