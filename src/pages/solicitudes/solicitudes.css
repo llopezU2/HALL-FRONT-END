@@ -4,6 +4,7 @@
     padding: 2rem;
     border-radius: 1rem;
     max-width: 600px;
+    min-height: calc(100vh - 0px);
     margin: 2rem auto;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;

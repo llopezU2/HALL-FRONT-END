@@ -2,9 +2,9 @@ import Navbar from "./Navbar";
 
 export default function Layout({ children }) {
   return (
-    <div className="min-h-screen">
+    <div className="layout-wrapper">
       <Navbar />
-      <main>{children}</main>
+      <main className="layout-content">{children}</main>
     </div>
   );
 }

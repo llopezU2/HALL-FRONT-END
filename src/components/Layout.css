@@ -1,0 +1,14 @@
+.layout-wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(to bottom right, #0f172a, #1e293b);
+    overflow-x: hidden;
+  }
+  
+  .layout-content {
+    flex: 1;
+    padding-top: 80px; /* compensa navbar fija (ajusta según altura real de la navbar) */
+    padding-bottom: 2rem; /* para evitar que el contenido se "pegue" abajo */
+  }
+  

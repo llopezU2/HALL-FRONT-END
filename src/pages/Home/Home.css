@@ -7,8 +7,8 @@
 /* HERO CON IMAGEN DE FONDO */
 .home-hero {
   position: relative;
-  height: 90vh;
-  width: 100%;
+  min-height: calc(100vh - 0px);
+
   overflow: hidden;
   display: flex;
   flex-direction: column;
