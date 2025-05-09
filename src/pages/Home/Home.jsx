@@ -1,40 +1,42 @@
-// src/pages/Home.jsx
 import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import GameCardList from "../../components/GameCardList";
 import api from "../../api/axiosConfig";
+import { motion, AnimatePresence } from "framer-motion";
 import "./Home.css";
 
 export default function Home() {
   const [recomendados, setRecomendados] = useState([]);
-  const [heroGame, setHeroGame] = useState(null);
+  const [heroGames, setHeroGames] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [modalUsuario, setModalUsuario] = useState(null);
 
+  // Carga inicial de datos
   useEffect(() => {
-    // 1) Cargar usuarios recomendados
     api
       .get("/auth/recomendados")
       .then(({ data }) => setRecomendados(data))
       .catch((err) => console.error("Error recomendados:", err));
 
-    // 2) Cargar juegos con portadas y elegir uno al azar
     api
       .get("/juego/con-portadas")
-      .then(({ data }) => {
-        if (data.length) {
-          const aleatorio = data[Math.floor(Math.random() * data.length)];
-          setHeroGame(aleatorio);
-        }
-      })
-      .catch((err) => console.error("Error heroGame:", err));
+      .then(({ data }) => setHeroGames(data))
+      .catch((err) => console.error("Error heroGames:", err));
   }, []);
+
+  // Ciclo automático de heroGames cada 5 segundos
+  useEffect(() => {
+    if (!heroGames.length) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((idx) => (idx + 1) % heroGames.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [heroGames]);
 
   const handleAgregarAmigo = async (id_receptor) => {
     try {
       const usr = JSON.parse(localStorage.getItem("user"));
-      if (!usr?.id_usuario) {
-        return alert("Inicia sesión primero.");
-      }
+      if (!usr?.id_usuario) return alert("Inicia sesión primero.");
       await api.post("/solicitud", {
         id_solicitante: usr.id_usuario,
         id_receptor,
@@ -47,23 +49,31 @@ export default function Home() {
     }
   };
 
+  const heroGame = heroGames[currentIndex];
+
   return (
     <Layout>
       <div className="home-container">
         {/* HERO */}
         <div className="home-hero">
-          {/* Imagen de fondo */}
-          {heroGame && (
-            <img
-              src={heroGame.portada}
-              alt={heroGame.titulo}
-              className="hero-image"
-            />
-          )}
+          <AnimatePresence>
+            {heroGame && (
+              <motion.img
+                key={heroGame.id_juego}
+                src={heroGame.portada}
+                alt={heroGame.titulo}
+                className="hero-image"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1 }}
+              />
+            )}
+          </AnimatePresence>
 
           <div className="hero-overlay">
             <div className="hero-content">
-              {/* Promo-box con datos del juego aleatorio */}
+              {/* Promo-box */}
               <div className="promo-box">
                 {heroGame && (
                   <>
@@ -72,11 +82,7 @@ export default function Home() {
                       <span className="promo-fecha">
                         {new Date(heroGame.released).toLocaleDateString(
                           "es-ES",
-                          {
-                            day: "2-digit",
-                            month: "long",
-                            year: "numeric",
-                          }
+                          { day: "2-digit", month: "long", year: "numeric" }
                         )}
                       </span>
                     )}
@@ -90,7 +96,7 @@ export default function Home() {
                 )}
               </div>
 
-              {/* Sidebar de usuarios recomendados */}
+              {/* Sidebar de recomendados */}
               <div className="sidebar-box">
                 <h3 className="sidebar-title">Usuarios Recomendados</h3>
                 <ul className="sidebar-list">
