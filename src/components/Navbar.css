@@ -196,6 +196,40 @@
   .platform:hover {
     color: #60a5fa;
   }
+
+  .navbar-profile-img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #3b82f6;
+    transition: transform 0.2s ease;
+  }
+  
+  .navbar-profile-img:hover {
+    transform: scale(1.05);
+  }
+  
+  .solicitudes-icon-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .solicitudes-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background-color: red;
+    color: white;
+    font-size: 0.65rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 999px;
+    line-height: 1;
+    z-index: 10;
+    box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.7); /* borde para contraste */
+  }
+  
   
   /* MENÚ HAMBURGUESA EN MÓVIL */
   

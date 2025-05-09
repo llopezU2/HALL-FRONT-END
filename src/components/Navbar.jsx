@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { auth } from "../auth";
 import logo from "../img/LogoOficialGrande.png";
+import api from "../api/axiosConfig"; // Asegurate de tener este import
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -15,21 +16,25 @@ export default function Navbar() {
   const [searchTerm, setSearchTerm] = useState('');
   const searchRef = useRef(null);
 
-  const isUserView = location.pathname === "/profile" || location.pathname === "/home"|| location.pathname === "/solicitudes";
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
+  const userId = user?.id_usuario;
 
-  const handleLogout = () => {
-    auth.logout();
-    navigate("/login");
-  };
+  const isUserView = location.pathname === "/profile" || location.pathname === "/home" || location.pathname === "/solicitudes";
+  const isSolicitudesView = location.pathname === "/solicitudes";
 
-  const toggleSearch = () => {
-    setIsSearchOpen(!isSearchOpen);
-    setSearchTerm('');
-  };
+  const [pendingSolicitudes, setPendingSolicitudes] = useState(0);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  // Fetch solicitudes pendientes
+  useEffect(() => {
+    if (userId) {
+      api.get(`/solicitud/received/${userId}`)
+        .then(res => {
+          setPendingSolicitudes(res.data.length);
+        })
+        .catch(err => console.error(err));
+    }
+  }, [location.pathname]); // se actualiza en cada cambio de vista
 
   // Detectar cambios de tamaño
   useEffect(() => {
@@ -55,154 +60,145 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isSearchOpen, isMobile]);
 
+  const handleLogout = () => {
+    auth.logout();
+    navigate("/login");
+  };
+
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+    setSearchTerm('');
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
     <div className='navbar-wrapper'>
+      <nav className="navbar">
+        {/* Logo y título */}
+        <div className="navbar-left">
+          <img src={logo} alt="Logo HALLGRANDE" className="navbar-img" />
+          <Link to="/" className="navbar-name">HALL</Link>
+        </div>
 
-      <>
-        <nav className="navbar">
-          {/* Logo y título */}
-          <div className="navbar-left">
-            <img src={logo} alt="Logo HALLGRANDE" className="navbar-img" />
-            <Link to="/" className="navbar-name">HALL</Link>
-          </div>
-
-          {/* Escritorio: plataformas + buscador embebido */}
-          {!isMobile && (
-            <div className="navbar-center">
-              <div className="platforms">
-                <Link to="/plataforma/playstation" className="platform">
-                  <i className="fab fa-playstation"></i> PlayStation
-                </Link>
-                <Link to="/plataforma/xbox" className="platform">
-                  <i className="fab fa-xbox"></i> Xbox
-                </Link>
-                <Link to="/plataforma/nintendo" className="platform">
-                  <i className="fas fa-gamepad"></i> Nintendo
-                </Link>
-                <Link to="/plataforma/pc" className="platform">
-                  <i className="fas fa-desktop"></i> PC
-                </Link>
-              </div>
-
-              <div className="search-wrapper" ref={searchRef}>
-                <button className="search-toggle" onClick={toggleSearch}>
-                  {isSearchOpen ? (
-                    <i className="fas fa-times"></i>
-                  ) : (
-                    <i className="fas fa-search"></i>
-                  )}
-                </button>
-                <input
-                  type="text"
-                  className={`navbar-search-input ${isSearchOpen ? 'visible' : ''}`}
-                  placeholder="Buscar juegos, plataformas..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </div>
+        {/* Escritorio: plataformas + buscador embebido */}
+        {!isMobile && (
+          <div className="navbar-center">
+            <div className="platforms">
+              <Link to="/plataforma/playstation" className="platform">
+                <i className="fab fa-playstation"></i> PlayStation
+              </Link>
+              <Link to="/plataforma/xbox" className="platform">
+                <i className="fab fa-xbox"></i> Xbox
+              </Link>
+              <Link to="/plataforma/nintendo" className="platform">
+                <i className="fas fa-gamepad"></i> Nintendo
+              </Link>
+              <Link to="/plataforma/pc" className="platform">
+                <i className="fas fa-desktop"></i> PC
+              </Link>
             </div>
-          )}
 
-          {/* Derecha: siempre visible */}
-          <div className="navbar-right">
-            {/* Lupa móvil */}
-            {isMobile && (
+            <div className="search-wrapper" ref={searchRef}>
               <button className="search-toggle" onClick={toggleSearch}>
-                <i className="fas fa-search"></i>
-              </button>
-            )}
-
-            {/* Menú hamburguesa móvil */}
-            {isMobile && (
-              <button className="menu-toggle" onClick={toggleMenu}>
-                <i className="fas fa-bars"></i>
-              </button>
-
-            )}
-
-            {/* Ícono de perfil solo en /profile */}
-            {isUserView && (
-              <Link to="/profile" className="navbar-link">
-                <i className="fas fa-user-circle"></i>
-              </Link>
-            )}
-
-            {isUserView && (
-              <Link to="/solicitudes" className="navbar-link">
-                <i className="fas fa-user-friends"></i>
-              </Link>
-            )}
-
-
-
-
-            {!isMobile && isUserView && isAuth && (
-              <button onClick={handleLogout} className="navbar-button-logout">
-                Cerrar sesión
-              </button>
-            )}
-
-
-
-          </div>
-        </nav>
-
-        {/* Modal buscador móvil */}
-        {isSearchOpen && isMobile && (
-          <div className="search-modal" onClick={() => setIsSearchOpen(false)}>
-            <div className="search-modal-content" onClick={(e) => e.stopPropagation()}>
-              <button className="search-close" onClick={() => setIsSearchOpen(false)}>
-                <i className="fas fa-times"></i>
+                {isSearchOpen ? (
+                  <i className="fas fa-times"></i>
+                ) : (
+                  <i className="fas fa-search"></i>
+                )}
               </button>
               <input
                 type="text"
-                className="search-modal-input"
+                className={`navbar-search-input ${isSearchOpen ? 'visible' : ''}`}
                 placeholder="Buscar juegos, plataformas..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                autoFocus
               />
             </div>
           </div>
         )}
 
-        {/* Menú hamburguesa móvil */}
-        {isMobile && isMenuOpen && (
-          <div className="mobile-menu">
-            <ul className="mobile-menu-list">
-              <li>
-                <Link to="/plataforma/playstation" className="platform" onClick={() => setIsMenuOpen(false)}>
-                  <i className="fab fa-playstation"></i> PlayStation
-                </Link>
-              </li>
-              <li>
-                <Link to="/plataforma/xbox" className="platform" onClick={() => setIsMenuOpen(false)}>
-                  <i className="fab fa-xbox"></i> Xbox
-                </Link>
-              </li>
-              <li>
-                <Link to="/plataforma/nintendo" className="platform" onClick={() => setIsMenuOpen(false)}>
-                  <i className="fas fa-gamepad"></i> Nintendo
-                </Link>
-              </li>
-              <li>
-                <Link to="/plataforma/pc" className="platform" onClick={() => setIsMenuOpen(false)}>
-                  <i className="fas fa-desktop"></i> PC
-                </Link>
-              </li>
-              {isProfileView && (
-                <li>
-                  <button className="logout-button" onClick={handleLogout}>
-                    <i className="fas fa-sign-out-alt"></i> Cerrar sesión
-                  </button>
-                </li>
+        {/* Derecha */}
+        <div className="navbar-right">
+          {isMobile && (
+            <>
+              <button className="search-toggle" onClick={toggleSearch}>
+                <i className="fas fa-search"></i>
+              </button>
+              <button className="menu-toggle" onClick={toggleMenu}>
+                <i className="fas fa-bars"></i>
+              </button>
+            </>
+          )}
+
+          {/* Foto de perfil */}
+          {isUserView && (
+            <Link to="/profile" className="navbar-link">
+              <img
+                src={user?.foto || `https://ui-avatars.com/api/?name=${user?.nombre || 'User'}&background=3b82f6&color=fff`}
+                alt="Perfil"
+                className="navbar-profile-img"
+              />
+            </Link>
+          )}
+
+          {/* Ícono de solicitudes con badge */}
+          {isUserView && (
+            <Link to="/solicitudes" className="navbar-link solicitudes-icon-wrapper">
+              <i className="fas fa-user-friends"></i>
+              {!isSolicitudesView && pendingSolicitudes > 0 && (
+                <span className="solicitudes-badge">{pendingSolicitudes}</span>
               )}
-            </ul>
+            </Link>
+          )}
+
+          {!isMobile && isUserView && isAuth && (
+            <button onClick={handleLogout} className="navbar-button-logout">
+              Cerrar sesión
+            </button>
+          )}
+        </div>
+      </nav>
+
+      {/* Modal buscador móvil */}
+      {isSearchOpen && isMobile && (
+        <div className="search-modal" onClick={() => setIsSearchOpen(false)}>
+          <div className="search-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="search-close" onClick={() => setIsSearchOpen(false)}>
+              <i className="fas fa-times"></i>
+            </button>
+            <input
+              type="text"
+              className="search-modal-input"
+              placeholder="Buscar juegos, plataformas..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              autoFocus
+            />
           </div>
-        )}
+        </div>
+      )}
 
-      </>
-
+      {/* Menú hamburguesa móvil */}
+      {isMobile && isMenuOpen && (
+        <div className="mobile-menu">
+          <ul className="mobile-menu-list">
+            <li><Link to="/plataforma/playstation" className="platform" onClick={() => setIsMenuOpen(false)}><i className="fab fa-playstation"></i> PlayStation</Link></li>
+            <li><Link to="/plataforma/xbox" className="platform" onClick={() => setIsMenuOpen(false)}><i className="fab fa-xbox"></i> Xbox</Link></li>
+            <li><Link to="/plataforma/nintendo" className="platform" onClick={() => setIsMenuOpen(false)}><i className="fas fa-gamepad"></i> Nintendo</Link></li>
+            <li><Link to="/plataforma/pc" className="platform" onClick={() => setIsMenuOpen(false)}><i className="fas fa-desktop"></i> PC</Link></li>
+            {isAuth && (
+              <li>
+                <button className="logout-button" onClick={handleLogout}>
+                  <i className="fas fa-sign-out-alt"></i> Cerrar sesión
+                </button>
+              </li>
+            )}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

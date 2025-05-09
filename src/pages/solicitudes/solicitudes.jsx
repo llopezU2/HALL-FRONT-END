@@ -38,9 +38,15 @@ export default function Solicitudes() {
     const aceptar = accion === "aceptar";
     api
       .patch(`/solicitud/respond/${id}`, null, { params: { aceptar } })
-      .then(() => fetchSolicitudes())
+      .then(() => {
+        fetchSolicitudes();
+        if (aceptar) {
+          fetchAmistades(); // ← esto se agrega para actualizar amistades
+        }
+      })
       .catch((err) => console.error(err));
   };
+  
 
   return (
     <Layout>

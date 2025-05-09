@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
+import GameCardList from "../../components/GameCardList";
 import portada from "../../img/GTA VI.png";
 import api from "../../api/axiosConfig";
 import "./Home.css";
+
 
 export default function Home() {
   const [promocion, setPromocion] = useState(null);
@@ -70,13 +72,13 @@ export default function Home() {
                 <span className="promo-fecha">
                   {promocion
                     ? new Date(promocion.fecha_inicio).toLocaleDateString(
-                        "es-ES",
-                        {
-                          day: "2-digit",
-                          month: "long",
-                          year: "numeric",
-                        }
-                      )
+                      "es-ES",
+                      {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      }
+                    )
                     : "14 Julio 2025"}
                 </span>
                 <h1 className="promo-titulo">
@@ -136,6 +138,7 @@ export default function Home() {
 
         <div className="home-body">
           <h2 className="section-title">Explora más juegos</h2>
+          <GameCardList />
         </div>
 
         {modalUsuario && (
