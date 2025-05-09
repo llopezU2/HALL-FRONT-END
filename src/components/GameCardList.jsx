@@ -8,40 +8,21 @@ export default function GameCardList() {
 
   useEffect(() => {
     api
-      .get("/juegos")
+      // Llamamos al endpoint que une DB + portadas de RAWG
+      .get("/juego/con-portadas")
       .then((res) => {
-        setJuegos(res.data);
+        // Mapear al shape que espera GameCard
+        const lista = res.data.map((juego) => ({
+          id: juego.id_juego,
+          titulo: juego.titulo,
+          descripcion: juego.descripcion,
+          precio: juego.precio ?? "N/A", // si no hay precio en tu modelo
+          imagen: juego.portada, // la URL que sacamos de RAWG
+        }));
+        setJuegos(lista);
       })
       .catch((err) => {
         console.error("Error al cargar juegos:", err);
-
-        // Datos de respaldo estáticos si falla la API
-        setJuegos([
-          {
-            id: 1,
-            titulo: "The Witcher 3",
-            precio: "29.99",
-            descripcion: "Un RPG épico de mundo abierto.",
-            imagen:
-              "https://upload.wikimedia.org/wikipedia/en/0/0c/Witcher_3_cover_art.jpg",
-          },
-          {
-            id: 2,
-            titulo: "Red Dead Redemption 2",
-            precio: "39.99",
-            descripcion: "Una historia del viejo oeste impresionante.",
-            imagen:
-              "https://upload.wikimedia.org/wikipedia/en/4/44/Red_Dead_Redemption_II.jpg",
-          },
-          {
-            id: 3,
-            titulo: "Cyberpunk 2077",
-            precio: "24.99",
-            descripcion: "Explora Night City como un mercenario cibernético.",
-            imagen:
-              "https://upload.wikimedia.org/wikipedia/en/9/9f/Cyberpunk_2077_box_art.jpg",
-          },
-        ]);
       });
   }, []);
 

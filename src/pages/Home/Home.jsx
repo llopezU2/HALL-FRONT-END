@@ -1,61 +1,48 @@
+// src/pages/Home.jsx
 import { useEffect, useState } from "react";
 import Layout from "../../components/Layout";
 import GameCardList from "../../components/GameCardList";
-import portada from "../../img/GTA VI.png";
 import api from "../../api/axiosConfig";
 import "./Home.css";
 
-
 export default function Home() {
-  const [promocion, setPromocion] = useState(null);
   const [recomendados, setRecomendados] = useState([]);
+  const [heroGame, setHeroGame] = useState(null);
   const [modalUsuario, setModalUsuario] = useState(null);
 
   useEffect(() => {
-    const fetchPromocion = async () => {
-      try {
-        const response = await api.get("/promocion");
-        setPromocion(response.data);
-      } catch (error) {
-        console.error("Error al cargar promoción:", error);
-      }
-    };
+    // 1) Cargar usuarios recomendados
+    api
+      .get("/auth/recomendados")
+      .then(({ data }) => setRecomendados(data))
+      .catch((err) => console.error("Error recomendados:", err));
 
-    //recomendados
-    const fetchRecomendados = async () => {
-      try {
-        const response = await api.get("/auth/recomendados");
-        setRecomendados(response.data);
-      } catch (error) {
-        console.error("Error al cargar recomendados:", error);
-      }
-    };
-
-    fetchPromocion();
-    fetchRecomendados();
+    // 2) Cargar juegos con portadas y elegir uno al azar
+    api
+      .get("/juego/con-portadas")
+      .then(({ data }) => {
+        if (data.length) {
+          const aleatorio = data[Math.floor(Math.random() * data.length)];
+          setHeroGame(aleatorio);
+        }
+      })
+      .catch((err) => console.error("Error heroGame:", err));
   }, []);
 
-  const handleAgregarAmigo = async (id_usuario_receptor) => {
+  const handleAgregarAmigo = async (id_receptor) => {
     try {
-      // Obtener el usuario actual desde el localStorage
-      const usuarioActual = JSON.parse(localStorage.getItem("user"));
-
-      // Validar que exista usuario actual
-      if (!usuarioActual || !usuarioActual.id_usuario) {
-        alert("No se ha iniciado sesión correctamente.");
-        return;
+      const usr = JSON.parse(localStorage.getItem("user"));
+      if (!usr?.id_usuario) {
+        return alert("Inicia sesión primero.");
       }
-
-      // Enviar solicitud al backend
       await api.post("/solicitud", {
-        id_solicitante: usuarioActual.id_usuario,
-        id_receptor: id_usuario_receptor,
+        id_solicitante: usr.id_usuario,
+        id_receptor,
       });
-
-      alert("Solicitud enviada correctamente");
+      alert("Solicitud enviada");
       setModalUsuario(null);
-    } catch (error) {
-      console.error("Error al enviar solicitud:", error);
+    } catch (err) {
+      console.error("Error al enviar solicitud:", err);
       alert("No se pudo enviar la solicitud.");
     }
   };
@@ -63,49 +50,47 @@ export default function Home() {
   return (
     <Layout>
       <div className="home-container">
+        {/* HERO */}
         <div className="home-hero">
-          <img src={portada} alt="Portada" className="hero-image" />
+          {/* Imagen de fondo */}
+          {heroGame && (
+            <img
+              src={heroGame.portada}
+              alt={heroGame.titulo}
+              className="hero-image"
+            />
+          )}
+
           <div className="hero-overlay">
             <div className="hero-content">
+              {/* Promo-box con datos del juego aleatorio */}
               <div className="promo-box">
-                <span className="promo-etiqueta">Reserva</span>
-                <span className="promo-fecha">
-                  {promocion
-                    ? new Date(promocion.fecha_inicio).toLocaleDateString(
-                      "es-ES",
-                      {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric",
-                      }
-                    )
-                    : "14 Julio 2025"}
-                </span>
-                <h1 className="promo-titulo">
-                  {promocion
-                    ? `${promocion.regalo_evento.juego.titulo}`
-                    : "Título del juego"}
-                </h1>
-                <p className="promo-descripcion">
-                  {promocion
-                    ? promocion.regalo_evento.juego.descripcion
-                    : "Descripción del juego..."}
-                </p>
-                <p className="promo-categoria">
-                  {promocion
-                    ? promocion.regalo_evento.juego.categoria.nombre
-                    : "Categoría"}
-                </p>
-                <div className="promo-precio">
-                  <span className="promo-valor">
-                    {promocion
-                      ? `${promocion.regalo_evento.juego.precio} €`
-                      : "75.89€"}
-                  </span>
-                </div>
-                <button className="styled-buy-button">Comprar</button>
+                {heroGame && (
+                  <>
+                    <span className="promo-etiqueta">Destacado</span>
+                    {heroGame.released && (
+                      <span className="promo-fecha">
+                        {new Date(heroGame.released).toLocaleDateString(
+                          "es-ES",
+                          {
+                            day: "2-digit",
+                            month: "long",
+                            year: "numeric",
+                          }
+                        )}
+                      </span>
+                    )}
+                    <h1 className="promo-titulo">{heroGame.titulo}</h1>
+                    <p className="promo-descripcion">{heroGame.descripcion}</p>
+                    <p className="promo-categoria">
+                      {heroGame.categoriaNombre}
+                    </p>
+                    <button className="styled-buy-button">Ver juego</button>
+                  </>
+                )}
               </div>
 
+              {/* Sidebar de usuarios recomendados */}
               <div className="sidebar-box">
                 <h3 className="sidebar-title">Usuarios Recomendados</h3>
                 <ul className="sidebar-list">
@@ -114,13 +99,7 @@ export default function Home() {
                       <li key={user.id_usuario} className="recomendado-item">
                         <button
                           className="recomendado-button"
-                          onClick={() => {
-                            console.log(
-                              "ModalUsuario se va a setear con:",
-                              user
-                            );
-                            setModalUsuario(user);
-                          }}
+                          onClick={() => setModalUsuario(user)}
                         >
                           {user.nombre}
                         </button>
@@ -133,14 +112,17 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="curved-divider"></div>
+
+          <div className="curved-divider" />
         </div>
 
+        {/* CUERPO: lista de juegos */}
         <div className="home-body">
           <h2 className="section-title">Explora más juegos</h2>
           <GameCardList />
         </div>
 
+        {/* Modal de usuario */}
         {modalUsuario && (
           <div className="modal-overlay" onClick={() => setModalUsuario(null)}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
