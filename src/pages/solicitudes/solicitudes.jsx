@@ -1,4 +1,3 @@
-// src/pages/solicitudes/solicitudes.jsx
 import Layout from "../../components/Layout";
 import { useEffect, useState } from "react";
 import api from "../../api/axiosConfig";
@@ -10,15 +9,26 @@ export default function Solicitudes() {
   const userId = user?.id_usuario;
 
   const [solicitudes, setSolicitudes] = useState([]);
+  const [amistades, setAmistades] = useState([]);
 
   useEffect(() => {
-    if (userId) fetchSolicitudes();
+    if (userId) {
+      fetchSolicitudes();
+      fetchAmistades();
+    }
   }, [userId]);
 
   const fetchSolicitudes = () => {
     api
       .get(`/solicitud/received/${userId}`)
       .then((res) => setSolicitudes(res.data))
+      .catch((err) => console.error(err));
+  };
+
+  const fetchAmistades = () => {
+    api
+      .get(`/amistades/${userId}`)
+      .then((res) => setAmistades(res.data))
       .catch((err) => console.error(err));
   };
 
@@ -32,21 +42,48 @@ export default function Solicitudes() {
 
   return (
     <Layout>
-      <div className="solicitudes-container">
-        <h2>Solicitudes de Amistad Recibidas</h2>
-        {!userId ? (
-          <p>Cargando usuario…</p>
-        ) : solicitudes.length === 0 ? (
-          <p>No hay solicitudes pendientes.</p>
-        ) : (
-          <ul>
-            {solicitudes.map((s) => (
-              <li key={s.id_solicitud}>
-                <div className="solicitante-info">
+      <div className="solicitudes-grid">
+        {/* Izquierda: Amistades */}
+        <div className="solicitudes-left">
+          <h2>Amigos</h2>
+          {amistades.length === 0 ? (
+            <p className="texto-centrado">No tenés amigos todavía.</p>
+          ) : (
+            amistades.map((amigo) => (
+              <div key={amigo.id_usuario} className="tarjeta-usuario">
+                <img
+                  src={`https://ui-avatars.com/api/?name=${amigo.nombre}&background=60a5fa&color=fff`}
+                  alt="Avatar"
+                  className="avatar"
+                />
+                <div className="usuario-info">
+                  <strong>{amigo.nombre}</strong>
+                  <small>{amigo.email}</small>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Derecha: Solicitudes */}
+        <div className="solicitudes-right">
+          <h2>Solicitudes de Amistad Recibidas</h2>
+          {!userId ? (
+            <p className="texto-centrado">Cargando usuario…</p>
+          ) : solicitudes.length === 0 ? (
+            <p className="texto-centrado">No hay solicitudes pendientes.</p>
+          ) : (
+            solicitudes.map((s) => (
+              <div key={s.id_solicitud} className="tarjeta-usuario">
+                <img
+                  src={`https://ui-avatars.com/api/?name=${s.solicitante.nombre}&background=3b82f6&color=fff`}
+                  alt="Avatar"
+                  className="avatar"
+                />
+                <div className="usuario-info">
                   <strong>{s.solicitante.nombre}</strong>
-                  <br />
                   <small>
-                    Enviada: {new Date(s.fecha_solicitud).toLocaleString()}
+                    Enviada: {new Date(s.fecha_solicitud).toLocaleDateString()}
                   </small>
                 </div>
                 <div className="acciones">
@@ -63,10 +100,10 @@ export default function Solicitudes() {
                     Rechazar
                   </button>
                 </div>
-              </li>
-            ))}
-          </ul>
-        )}
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </Layout>
   );

@@ -1,81 +1,185 @@
-.solicitudes-container {
-    background: linear-gradient(to bottom right, #0f172a, #1e293b);
-    color: #f8fafc;
-    padding: 2rem;
-    border-radius: 1rem;
-    max-width: 600px;
-    min-height: calc(100vh - 0px);
-    margin: 2rem auto;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* solicitudes.css */
+
+.solicitudes-grid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
+  padding: 7rem 2rem 4rem; /* más margen arriba y abajo */
+  min-height: 100vh;
+  background: linear-gradient(to bottom, #0f172a, #1e293b);
+  color: #f1f5f9;
+}
+
+.solicitudes-left,
+.solicitudes-right {
+  background-color: rgba(30, 41, 59, 0.85);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  min-height: 400px; /* Aumentá este valor si querés aún más espacio */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* por defecto */
+  position: relative;
+
+}
+
+.solicitudes-left p,
+.solicitudes-right p {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #94a3b8;
+  font-style: italic;
+  min-height: 200px;
+}
+
+.solicitudes-left {
+  flex: 1.3;
+}
+
+.solicitudes-right {
+  flex: 0.7;
+}
+
+h2 {
+  font-size: 1.5rem;
+  color: #38bdf8;
+  margin-bottom: 1rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin-bottom: 1.8rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid #334155;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.solicitante-info {
+  flex: 1;
+}
+
+.acciones {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tarjeta-usuario {
+  background-color: rgba(30, 41, 59, 0.8); /* azul oscuro translúcido */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  flex-wrap: wrap;
+
+}
+
+.tarjeta-usuario:hover {
+  transform: translateY(-3px);
+  background-color: rgba(30, 41, 59, 0.9);
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3b82f6;
+}
+
+.usuario-info {
+  display: flex;
+  flex-direction: column;
+  color: #f1f5f9;
+}
+
+.usuario-info strong {
+  font-size: 1rem;
+  color: #3b82f6;
+}
+
+.usuario-info small {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.acciones {
+  margin-left: auto;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-aceptar,
+.btn-rechazar {
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-aceptar {
+  background-color: #22c55e;
+  color: white;
+}
+
+.btn-aceptar:hover {
+  background-color: #16a34a;
+}
+
+.btn-rechazar {
+  background-color: #ef4444;
+  color: white;
+}
+
+.btn-rechazar:hover {
+  background-color: #dc2626;
+}
+
+
+/* VISTA MOVILES */
+@media (max-width: 768px) {
+  .solicitudes-grid {
+    flex-direction: column;
+    padding: 6rem 1rem 2rem;
   }
-  
-  .solicitudes-container h2 {
-    text-align: center;
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-    color: #38bdf8;
+
+  .solicitudes-left,
+  .solicitudes-right {
+    width: 100%;
   }
-  
-  .solicitudes-container ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+
+  li {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
-  .solicitudes-container li {
-    background-color: rgba(255, 255, 255, 0.05);
-    padding: 1rem;
-    margin-bottom: 0.75rem;
-    border-radius: 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: background-color 0.2s ease-in-out;
-  }
-  
-  .solicitudes-container li:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  
-  .solicitudes-container p {
-    text-align: center;
-    font-size: 1.1rem;
-    color: #94a3b8;
-  }
-  
+
   .acciones {
-    display: flex;
-    gap: 0.5rem;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 0.5rem;  
   }
   
-  .btn-aceptar,
-  .btn-rechazar {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.9rem;
-    border: none;
-    border-radius: 0.4rem;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background 0.2s ease;
+  .tarjeta-usuario {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
-  .btn-aceptar {
-    background-color: #22c55e;
-    color: white;
-  }
-  
-  .btn-aceptar:hover {
-    background-color: #16a34a;
-  }
-  
-  .btn-rechazar {
-    background-color: #ef4444;
-    color: white;
-  }
-  
-  .btn-rechazar:hover {
-    background-color: #dc2626;
-  }
-  
+
+}
