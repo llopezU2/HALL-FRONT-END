@@ -27,8 +27,10 @@ export default function Solicitudes() {
 
   const fetchAmistades = () => {
     api
-      .get(`/amistades/${userId}`)
-      .then((res) => setAmistades(res.data))
+      .get(`/amistad/${userId}`)
+      .then((res) => {
+        setAmistades(res.data);
+      })
       .catch((err) => console.error(err));
   };
 
