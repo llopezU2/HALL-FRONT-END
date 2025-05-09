@@ -1,55 +1,106 @@
-/* Home.css */
+/* ————— GRID DE EXPLORA MÁS JUEGOS ————— */
 .explora-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem;
-    padding: 2rem 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* fija 4 cols */
+  gap: 1.5rem;
+  padding: 2rem 4rem;
+}
+
+/* Responsivo: 2 columnas en pantallas medias, 1 en móviles */
+@media (max-width: 1024px) {
+  .explora-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 2rem;
   }
-  
-  
-  /* GameCard.css */
-  .game-card {
-    display: flex;
-    flex-direction: column;
-    background-color: #1e293b;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    text-decoration: none;
-    color: #f1f5f9;
-    transition: transform 0.2s ease;
-  }
-  
-  .game-card:hover {
-    transform: scale(1.03);
-  }
-  
-  .game-card-image {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-  }
-  
-  .game-card-content {
+}
+@media (max-width: 640px) {
+  .explora-grid {
+    grid-template-columns: 1fr;
     padding: 1rem;
   }
-  
-  .game-card-title {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    color: #60a5fa;
-  }
-  
-  .game-card-description {
-    font-size: 0.9rem;
-    color: #cbd5e1;
-    margin-bottom: 0.75rem;
-  }
-  
-  .game-card-price {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #22c55e;
-  }
-  
+}
+
+/* ————— GAME CARD MEJORADA ————— */
+.game-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #1e293b;
+  border-radius: 0.75rem; /* bordes más suaves */
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  text-decoration: none;
+  color: #f1f5f9;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Imagen con altura uniforme */
+.game-card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Contenido */
+.game-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.25rem;
+}
+
+/* Título */
+.game-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #60a5fa;
+}
+
+/* Descripción con línea límite */
+.game-card-description {
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* máximo 3 líneas */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Footer de precio */
+.game-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+/* Precio */
+.game-card-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #22c55e;
+}
+
+/* Botón “Ver” (opcional) */
+.game-card-button {
+  background-color: #3b82f6;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.game-card-button:hover {
+  background-color: #2563eb;
+}

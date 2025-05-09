@@ -304,3 +304,17 @@
 .modal-buttons .btn-close:hover {
   background-color: #dc2626;
 }
+
+
+.promo-descripcion {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  color: #e5e7eb; 
+}
+
+.promo-categoria {
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  margin-bottom: 1rem;
+}
