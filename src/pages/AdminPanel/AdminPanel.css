@@ -1,0 +1,263 @@
+/* PANEL ADMIN PRINCIPAL */
+.admin-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-content {
+  display: flex;
+}
+
+/* SIDEBAR */
+.admin-sidebar {
+  width: 220px;
+  background-color: #1e293b;
+  padding: 2rem 1rem;
+  color: white;
+  height: 100vh;
+  position: fixed;
+  top: 77px;
+  left: 0;
+  border-right: 1px solid #334155;
+  z-index: 1001;
+  transition: transform 0.3s ease;
+}
+
+.admin-sidebar h3 {
+  color: #38bdf8;
+  margin-bottom: 1.5rem;
+}
+
+.admin-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-sidebar li {
+  margin-bottom: 1rem;
+}
+
+.admin-sidebar a {
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.admin-sidebar a:hover {
+  color: #ffffff;
+}
+
+.admin-sidebar.show {
+  transform: translateX(0);
+}
+
+.admin-sidebar.hide {
+  transform: translateX(-100%);
+}
+
+/* CONTENIDO DEL PANEL */
+.admin-panel {
+  padding: 2rem;
+  background: linear-gradient(to bottom, #0f172a, #1e293b);
+  color: #f1f5f9;
+  min-height: 100vh;
+  flex: 1;
+  margin-left: 220px;
+  margin-top: 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.admin-panel.no-sidebar {
+  margin-left: 0;
+}
+
+h1 {
+  color: #38bdf8;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+/* FORMULARIOS */
+.form-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.form-section {
+  background-color: rgba(30, 41, 59, 0.85);
+  padding: 1.5rem 1.5rem 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  width: 45%;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  position: relative;
+}
+
+.form-section h2 {
+  color: #38bdf8;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.form-section form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+input,
+textarea,
+select {
+  padding: 0.6rem !important;
+  margin-bottom: 0.75rem !important;
+  border-radius: 6px !important;
+  border: 1px solid #334155 !important;
+  background-color: #0f172a !important;
+  color: #f1f5f9 !important;
+  font-size: 0.95rem !important;
+  width: 100% !important;
+  margin-bottom: 0.75rem !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #38bdf8;
+}
+
+button[type="submit"] {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+button[type="submit"]:hover {
+  background-color: #2563eb;
+}
+
+.fab-toggle {
+  position: fixed;
+  top: 50%; /* mitad vertical */
+  right: -1.5rem; /* ajusta si quieres más separado del borde */
+  transform: translateY(-50%);
+  background-color: #38bdf8;
+  color: white;
+  border: none;
+  border-radius: 8px 0 0 8px;
+  padding: 0.8rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 1500;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  display: none; /* se activa solo en móvil */
+}
+
+@media (max-width: 768px) {
+  .fab-toggle {
+    display: block;
+  }
+}
+
+
+.floating-button-container {
+  position: fixed;
+  top: 50%;
+  right: 1.5rem;
+  transform: translateY(-50%);
+  z-index: 1500;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.fab-menu {
+  background-color: #1e293b;
+  margin-bottom: 10rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 0.5rem 0;
+  width: 180px;
+  animation: fadeInSlide 0.3s ease-out;
+}
+
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fab-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  color: #f1f5f9;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background-color: transparent;
+  transition: background-color 0.2s ease, padding-left 0.2s ease;
+  border-left: 4px solid transparent;
+}
+
+.fab-link:hover {
+  background-color: #334155;
+  padding-left: 1.4rem;
+  border-left: 4px solid #38bdf8;
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOutSlide {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.fab-menu.fade-in {
+  animation: fadeInSlide 0.3s ease-out;
+}
+
+.fab-menu.fade-out {
+  animation: fadeOutSlide 0.25s ease-in;
+}

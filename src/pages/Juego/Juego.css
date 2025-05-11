@@ -1,0 +1,82 @@
+body {
+  background-color: #1e293b; /* Fondo oscuro similar al de Home */
+  color: white;
+  font-family: 'Arial', sans-serif;
+}
+
+.juego-container {
+  padding: 3rem 2rem;
+  text-align: center;
+  color: white;
+  background-color: #0f172a;  /* Fondo oscuro similar al de Home */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.juego-portada {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+
+
+.juego-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #60a5fa;
+}
+
+.juego-description {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #e5e7eb;
+}
+
+.juego-precio {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #facc15;
+}
+
+.juego-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.juego-actions button {
+  background-color: #3b82f6;
+  color: white;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.juego-actions button:hover {
+  background-color: #2563eb;
+}
+
+.juego-actions .btn-favoritos {
+  background-color: #ef4444;
+}
+
+.juego-actions .btn-favoritos:hover {
+  background-color: #dc2626;
+}
+
+.juego-actions .btn-carrito {
+  background-color: #60a5fa;
+}
+
+.juego-actions .btn-carrito:hover {
+  background-color: #3b82f6;
+}
+

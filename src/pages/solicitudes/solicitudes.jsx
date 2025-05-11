@@ -10,7 +10,10 @@ export default function Solicitudes() {
 
   const [solicitudes, setSolicitudes] = useState([]);
   const [amistades, setAmistades] = useState([]);
+  const [modalUsuario, setModalUsuario] = useState(null); // Para el modal de amistad
+  const [confirmDelete, setConfirmDelete] = useState(null); // Para el mini-modal de confirmación de eliminar
 
+  // Fetch solicitudes y amistades
   useEffect(() => {
     if (userId) {
       fetchSolicitudes();
@@ -46,7 +49,16 @@ export default function Solicitudes() {
       })
       .catch((err) => console.error(err));
   };
-  
+
+  const eliminarAmistad = (id_amigo) => {
+    api
+      .delete(`/amistad/eliminar/${id_amigo}`)
+      .then(() => {
+        fetchAmistades(); // Para actualizar la lista de amistades
+        setConfirmDelete(null); // Cerrar el mini-modal
+      })
+      .catch((err) => console.error(err));
+  };
 
   return (
     <Layout>
@@ -58,7 +70,11 @@ export default function Solicitudes() {
             <p className="texto-centrado">No tenés amigos todavía.</p>
           ) : (
             amistades.map((amigo) => (
-              <div key={amigo.id_usuario} className="tarjeta-usuario">
+              <div
+                key={amigo.id_usuario}
+                className="tarjeta-usuario"
+                onClick={() => setModalUsuario(amigo)} 
+              >
                 <img
                   src={`https://ui-avatars.com/api/?name=${amigo.nombre}&background=60a5fa&color=fff`}
                   alt="Avatar"
@@ -66,7 +82,6 @@ export default function Solicitudes() {
                 />
                 <div className="usuario-info">
                   <strong>{amigo.nombre}</strong>
-                  <small>{amigo.email}</small>
                 </div>
               </div>
             ))
@@ -113,6 +128,45 @@ export default function Solicitudes() {
           )}
         </div>
       </div>
+
+      {/* Modal de usuario (Amistad) */}
+      {modalUsuario && (
+        <div className="modal-overlay" onClick={() => setModalUsuario(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>{modalUsuario.nombre}</h2>
+            <p>Email: {modalUsuario.email}</p>
+            <div className="modal-buttons">
+              <button className="styled-button">Ver Biblioteca</button>
+              <button
+                className="styled-button eliminar"
+                onClick={() => setConfirmDelete(modalUsuario.id_usuario)}
+              >
+                Eliminar amistad
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mini-modal de confirmación de eliminar amistad */}
+      {confirmDelete && (
+        <div className="mini-modal-overlay" onClick={() => setConfirmDelete(null)}>
+          <div className="mini-modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>¿Estás seguro que quieres eliminar esta amistad?</h3>
+            <div className="mini-modal-buttons">
+              <button
+                className="styled-button eliminar"
+                onClick={() => eliminarAmistad(confirmDelete)}
+              >
+                Eliminar
+              </button>
+              <button className="styled-button" onClick={() => setConfirmDelete(null)}>
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 }

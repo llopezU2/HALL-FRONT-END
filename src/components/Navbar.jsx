@@ -4,8 +4,9 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { auth } from "../auth";
 import logo from "../img/LogoOficialGrande.png";
 import api from "../api/axiosConfig"; // Asegurate de tener este import
+import { FaBars } from "react-icons/fa";
 
-export default function Navbar() {
+export default function Navbar({ onToggleSidebar }) {
   const navigate = useNavigate();
   const location = useLocation();
   const isAuth = auth.isAuthenticated();
@@ -19,9 +20,6 @@ export default function Navbar() {
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
   const userId = user?.id_usuario;
-
-  const isUserView = location.pathname === "/profile" || location.pathname === "/home" || location.pathname === "/solicitudes";
-  const isSolicitudesView = location.pathname === "/solicitudes";
 
   const [pendingSolicitudes, setPendingSolicitudes] = useState(0);
 
@@ -80,7 +78,7 @@ export default function Navbar() {
         {/* Logo y título */}
         <div className="navbar-left">
           <img src={logo} alt="Logo HALLGRANDE" className="navbar-img" />
-          <Link to="/" className="navbar-name">HALL</Link>
+          <Link to="/home" className="navbar-name">HALL</Link>
         </div>
 
         {/* Escritorio: plataformas + buscador embebido */}
@@ -124,17 +122,22 @@ export default function Navbar() {
         <div className="navbar-right">
           {isMobile && (
             <>
-              <button className="search-toggle" onClick={toggleSearch}>
-                <i className="fas fa-search"></i>
-              </button>
-              <button className="menu-toggle" onClick={toggleMenu}>
-                <i className="fas fa-bars"></i>
-              </button>
+              {onToggleSidebar ? (
+                <button className="menu-toggle-float" onClick={onToggleSidebar}>
+                  <FaBars />
+                </button>
+              ) : (
+                <button className="menu-toggle" onClick={toggleMenu}>
+                  <FaBars />
+                </button>
+              )}
             </>
           )}
 
+
+
           {/* Foto de perfil */}
-          {isUserView && (
+          {isAuth && (
             <Link to="/profile" className="navbar-link">
               <img
                 src={user?.foto || `https://ui-avatars.com/api/?name=${user?.nombre || 'User'}&background=3b82f6&color=fff`}
@@ -145,21 +148,26 @@ export default function Navbar() {
           )}
 
           {/* Ícono de solicitudes con badge */}
-          {isUserView && (
+          {isAuth && (
             <Link to="/solicitudes" className="navbar-link solicitudes-icon-wrapper">
               <i className="fas fa-user-friends"></i>
-              {!isSolicitudesView && pendingSolicitudes > 0 && (
+              {pendingSolicitudes > 0 && (
                 <span className="solicitudes-badge">{pendingSolicitudes}</span>
               )}
             </Link>
           )}
 
-          {!isMobile && isUserView && isAuth && (
+          {!isMobile && isAuth && (
             <button onClick={handleLogout} className="navbar-button-logout">
               Cerrar sesión
             </button>
           )}
+
+
         </div>
+
+
+
       </nav>
 
       {/* Modal buscador móvil */}

@@ -87,7 +87,7 @@ li {
   transition: transform 0.2s ease;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   flex-wrap: wrap;
-
+  cursor: pointer;
 }
 
 .tarjeta-usuario:hover {
@@ -182,4 +182,66 @@ li {
     align-items: flex-start;
   }
 
+}
+
+
+/* Botones en el modal */
+.styled-button {
+  padding: 10px 20px;
+  background-color: #496da8;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  text-align: center;
+}
+
+.styled-button:hover {
+  background-color: #839bce;
+  color: #0f172a;
+}
+
+/* Botón de eliminar en el modal */
+.styled-button.eliminar {
+  background-color: #ef4444;
+}
+
+.styled-button.eliminar:hover {
+  background-color: #c05e5e;
+}
+
+/* Mini-modal */
+.mini-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.mini-modal-content h3 {
+  margin-bottom: 40px;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.mini-modal-content {
+  background-color: #20335c;
+  padding: 30px;
+  border-radius: 8px;
+  max-width: 400px;
+  width: 90%;
+}
+
+.mini-modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 80px;
 }
