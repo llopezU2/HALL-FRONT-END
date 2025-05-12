@@ -52,7 +52,7 @@ export default function Solicitudes() {
 
   const eliminarAmistad = (id_amigo) => {
     api
-      .delete(`/amistad/eliminar/${id_amigo}`)
+      .delete(`/amistad/delete/${id_amigo}`) // Cambiar "eliminar" por "delete"
       .then(() => {
         fetchAmistades(); // Para actualizar la lista de amistades
         setConfirmDelete(null); // Cerrar el mini-modal
@@ -73,7 +73,7 @@ export default function Solicitudes() {
               <div
                 key={amigo.id_usuario}
                 className="tarjeta-usuario"
-                onClick={() => setModalUsuario(amigo)} 
+                onClick={() => setModalUsuario(amigo)}
               >
                 <img
                   src={`https://ui-avatars.com/api/?name=${amigo.nombre}&background=60a5fa&color=fff`}
@@ -150,8 +150,14 @@ export default function Solicitudes() {
 
       {/* Mini-modal de confirmación de eliminar amistad */}
       {confirmDelete && (
-        <div className="mini-modal-overlay" onClick={() => setConfirmDelete(null)}>
-          <div className="mini-modal-content" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="mini-modal-overlay"
+          onClick={() => setConfirmDelete(null)}
+        >
+          <div
+            className="mini-modal-content"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h3>¿Estás seguro que quieres eliminar esta amistad?</h3>
             <div className="mini-modal-buttons">
               <button
@@ -160,7 +166,10 @@ export default function Solicitudes() {
               >
                 Eliminar
               </button>
-              <button className="styled-button" onClick={() => setConfirmDelete(null)}>
+              <button
+                className="styled-button"
+                onClick={() => setConfirmDelete(null)}
+              >
                 Cancelar
               </button>
             </div>
