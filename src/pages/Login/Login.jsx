@@ -1,6 +1,7 @@
 import "./Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import Layout from "../../components/Layout";
 import api from "../../api/axiosConfig";
 
@@ -8,7 +9,6 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleLogin = async () => {
     try {
@@ -17,18 +17,26 @@ export default function Login() {
         contraseña: password,
       });
 
-      const { access_token } = response.data;
-      // 1) Guardamos el token
-      localStorage.setItem("token", access_token);
-      // 2) Inyectamos el header para las siguientes peticiones
-      api.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
-      // 3) Recuperamos el profile para extraer el userId
-      const profile = await api.get("/auth/profile");
-      localStorage.setItem("user", JSON.stringify(profile.data));
+      const { access_token, user } = response.data;
 
-      navigate("/home");
+      // 1) Guardar token y user
+      localStorage.setItem("token", access_token);
+      api.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
+      localStorage.setItem("user", JSON.stringify(user));
+
+      // 2) Redirigir según rol
+      if (user.rol.id_rol === 1) {
+        navigate("/admin");
+      } else {
+        navigate("/home");
+      }
     } catch (err) {
-      setError("Credenciales inválidas. Por favor, inténtalo de nuevo.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Credenciales inválidas. Por favor, inténtalo de nuevo.",
+        confirmButtonText: "OK",
+      });
     }
   };
 
@@ -37,8 +45,6 @@ export default function Login() {
       <div className="login-container">
         <div className="login-box">
           <h1 className="login-title">Iniciar sesión</h1>
-
-          {error && <p className="login-error">{error}</p>}
 
           <form className="login-form" onSubmit={(e) => e.preventDefault()}>
             <label>Correo electrónico</label>

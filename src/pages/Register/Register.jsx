@@ -1,6 +1,7 @@
 import "./Register.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import Layout from "../../components/Layout";
 import api from "../../api/axiosConfig";
 
@@ -10,6 +11,7 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
   const [passwordRequirements, setPasswordRequirements] = useState({
     length: false,
     lowercase: false,
@@ -18,26 +20,36 @@ export default function Register() {
     special: false,
   });
 
+  // Detecta si el usuario está usando el código admin
+  const isAdminCode = password === "ADMIN123";
+
   const handlePasswordChange = (value) => {
     setPassword(value);
 
-    setPasswordRequirements({
-      length: value.length >= 8,
-      lowercase: /[a-z]/.test(value),
-      uppercase: /[A-Z]/.test(value),
-      number: /\d/.test(value),
-      special: /[\W_]/.test(value),
-    });
+    // Solo validar requisitos cuando NO sea el código de admin
+    if (value !== "ADMIN123") {
+      setPasswordRequirements({
+        length: value.length >= 8,
+        lowercase: /[a-z]/.test(value),
+        uppercase: /[A-Z]/.test(value),
+        number: /\d/.test(value),
+        special: /[\W_]/.test(value),
+      });
+    }
   };
 
   const handleRegister = async () => {
-    // Validaciones
+    // Reset error
+    setError("");
+
+    // Validaciones básicas de nombre y email
     const usernameRegex = /^[a-zA-Z0-9]+$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passwordValid = Object.values(passwordRequirements).every(Boolean);
 
     if (!usernameRegex.test(nombre)) {
-      setError("El nombre solo puede contener letras y números, sin espacios ni símbolos.");
+      setError(
+        "El nombre solo puede contener letras y números, sin espacios ni símbolos."
+      );
       return;
     }
 
@@ -46,6 +58,9 @@ export default function Register() {
       return;
     }
 
+    // Si no es código admin, chequea requisitos de contraseña
+    const passwordValid =
+      isAdminCode || Object.values(passwordRequirements).every(Boolean);
     if (!passwordValid) {
       setError("La contraseña no cumple con los requisitos de seguridad.");
       return;
@@ -58,9 +73,19 @@ export default function Register() {
         contraseña: password,
       });
 
+      // SweetAlert de éxito
+      await Swal.fire({
+        icon: "success",
+        title: "Registro exitoso",
+        text: isAdminCode
+          ? "Has creado una cuenta de administrador exitosamente"
+          : "Te has registrado correctamente",
+        confirmButtonText: "OK",
+      });
+
       navigate("/login");
     } catch (err) {
-      setError("Error al registrar. Por favor, intentá de nuevo.");
+      setError("Error al registrar. Por favor, inténtalo de nuevo.");
     }
   };
 
@@ -100,36 +125,70 @@ export default function Register() {
               onChange={(e) => handlePasswordChange(e.target.value)}
             />
 
-            {/* Requisitos en tiempo real */}
-            {password && (
-              <div className="password-requirements">
-                <p className={passwordRequirements.length ? "valid" : "invalid"}>
-                  {passwordRequirements.length ? "✅" : "❌"} Al menos 8 caracteres
-                </p>
-                <p className={passwordRequirements.lowercase ? "valid" : "invalid"}>
-                  {passwordRequirements.lowercase ? "✅" : "❌"} Una letra minúscula
-                </p>
-                <p className={passwordRequirements.uppercase ? "valid" : "invalid"}>
-                  {passwordRequirements.uppercase ? "✅" : "❌"} Una letra mayúscula
-                </p>
-                <p className={passwordRequirements.number ? "valid" : "invalid"}>
-                  {passwordRequirements.number ? "✅" : "❌"} Un número
-                </p>
-                <p className={passwordRequirements.special ? "valid" : "invalid"}>
-                  {passwordRequirements.special ? "✅" : "❌"} Un símbolo (!@#$%)
-                </p>
-              </div>
+            {/* Si es el código admin, mostramos mensaje especial */}
+            {isAdminCode ? (
+              <p className="special-admin-msg">
+                🔐 Estás creando una cuenta <strong>ADMINISTRADOR</strong>
+              </p>
+            ) : (
+              // Si no, mostramos los requisitos habituales
+              password && (
+                <>
+                  <div className="password-requirements">
+                    <p
+                      className={
+                        passwordRequirements.length ? "valid" : "invalid"
+                      }
+                    >
+                      {passwordRequirements.length ? "✅" : "❌"} Al menos 8
+                      caracteres
+                    </p>
+                    <p
+                      className={
+                        passwordRequirements.lowercase ? "valid" : "invalid"
+                      }
+                    >
+                      {passwordRequirements.lowercase ? "✅" : "❌"} Una letra
+                      minúscula
+                    </p>
+                    <p
+                      className={
+                        passwordRequirements.uppercase ? "valid" : "invalid"
+                      }
+                    >
+                      {passwordRequirements.uppercase ? "✅" : "❌"} Una letra
+                      mayúscula
+                    </p>
+                    <p
+                      className={
+                        passwordRequirements.number ? "valid" : "invalid"
+                      }
+                    >
+                      {passwordRequirements.number ? "✅" : "❌"} Un número
+                    </p>
+                    <p
+                      className={
+                        passwordRequirements.special ? "valid" : "invalid"
+                      }
+                    >
+                      {passwordRequirements.special ? "✅" : "❌"} Un símbolo
+                      (!@#$%)
+                    </p>
+                  </div>
+                  <div className="password-strength-bar">
+                    <div
+                      className="password-strength-fill"
+                      style={{
+                        width: `${
+                          Object.values(passwordRequirements).filter(Boolean)
+                            .length * 20
+                        }%`,
+                      }}
+                    />
+                  </div>
+                </>
+              )
             )}
-            {/* Barra de seguridad de la contraseña */}
-            <div className="password-strength-bar">
-              <div
-                className="password-strength-fill"
-                style={{
-                  width: `${Object.values(passwordRequirements).filter(Boolean).length * 20}%`,
-                }}
-              ></div>
-            </div>
-
 
             <button className="register-button" onClick={handleRegister}>
               Registrarse
