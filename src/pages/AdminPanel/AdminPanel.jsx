@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FaBars } from "react-icons/fa";
 import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import api from "../../api/axiosConfig";
 import Navbar from "../../components/Navbar";
 import "./AdminPanel.css";
@@ -79,7 +80,11 @@ export default function AdminPanel() {
     e.preventDefault();
     const { titulo, descripcion, precio, categoria } = newGame;
     if (!titulo || !descripcion || !precio || !categoria) {
-      return alert("Completa todos los campos del juego");
+      return Swal.fire(
+        "Error",
+        "Completa todos los campos del juego",
+        "warning"
+      );
     }
     if (!isValidPrice(precio)) {
       return alert("El precio del juego no es válido");
@@ -92,7 +97,7 @@ export default function AdminPanel() {
         cantidad: 1,
         cantidad_disponible: 1,
       });
-      alert("Juego agregado con éxito");
+      Swal.fire("Éxito", "Juego agregado con éxito", "success");
       setNewGame({ titulo: "", descripcion: "", precio: "", categoria: "" });
     } catch {
       alert("Error al agregar juego");
@@ -104,15 +109,19 @@ export default function AdminPanel() {
     e.preventDefault();
     const { nombre, descripcion } = newCategory;
     if (!nombre || !descripcion) {
-      return alert("Completa todos los campos de la categoría");
+      return Swal.fire(
+        "Error",
+        "Completa todos los campos de la categoría",
+        "warning"
+      );
     }
     try {
       await api.post("/categoria-juego", { nombre, descripcion });
-      alert("Categoría agregada con éxito");
-      setNewCategory({ nombre: "", descripcion: "" });
+      Swal.fire("Éxito", "Categoría agregada con éxito", "success");
     } catch {
-      alert("Error al agregar categoría");
+      Swal.fire("Error", "Error al agregar categoría", "error");
     }
+    setNewCategory({ nombre: "", descripcion: "" });
   };
 
   // Submit Agregar Proveedor
@@ -120,18 +129,23 @@ export default function AdminPanel() {
     e.preventDefault();
     const { nombre, contacto, correo } = newProvider;
     if (!nombre || !contacto || !correo) {
-      return alert("Completa todos los campos del proveedor");
+      return Swal.fire(
+        "Error",
+        "Completa todos los campos del proveedor",
+        "warning"
+      );
     }
     if (!isValidEmail(correo)) {
-      return alert("El correo no es válido");
+      return Swal.fire("Error", "El correo no es válido", "warning");
     }
     try {
       await api.post("/proveedores", { nombre, contacto, correo });
-      alert("Proveedor agregado con éxito");
-      setNewProvider({ nombre: "", contacto: "", correo: "" });
+      Swal.fire("Éxito", "Proveedor agregado con éxito", "success");
     } catch {
-      alert("Error al agregar proveedor");
+      Swal.fire("Error", "Error al agregar proveedor", "error");
     }
+
+    setNewProvider({ nombre: "", contacto: "", correo: "" });
   };
 
   return (
