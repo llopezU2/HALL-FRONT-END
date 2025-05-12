@@ -48,7 +48,7 @@ function App() {
           path="/juego/:id"
           element={
             <ProtectedRoute>
-              <Juego />  {/* Vista del juego */}
+              <Juego /> {/* Vista del juego */}
             </ProtectedRoute>
           }
         />
@@ -56,8 +56,8 @@ function App() {
         {/* Ruta para el Panel de Administración (Admin) */}
         <Route path="/admin" element={<AdminPanel />} />
 
-          {/* Categoria */}
-<Route path="/admin/categorias" element={<Categoria />} />
+        {/* Categoria */}
+        <Route path="/admin/categorias" element={<Categoria />} />
 
         {/* Ruta por defecto (redirección al login si la URL no existe) */}
         <Route path="*" element={<Login />} />
