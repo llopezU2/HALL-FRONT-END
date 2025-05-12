@@ -272,6 +272,55 @@ export default function AdminPanel() {
                 <button type="submit">Agregar Proveedor</button>
               </form>
             </div>
+
+            {/*
+              <div className="form-section">
+                <h2>Agregar Evento</h2>
+                <form onSubmit={handleEventSubmit}>
+                  <input
+                    type="text"
+                    placeholder="Título del evento"
+                    value={newEvent.titulo}
+                    onChange={e => setNewEvent({ ...newEvent, titulo: e.target.value })}
+                  />
+                  <input
+                    type="datetime-local"
+                    value={newEvent.fecha_inicio}
+                    onChange={e => setNewEvent({ ...newEvent, fecha_inicio: e.target.value })}
+                  />
+                  <input
+                    type="datetime-local"
+                    value={newEvent.fecha_fin}
+                    onChange={e => setNewEvent({ ...newEvent, fecha_fin: e.target.value })}
+                  />
+                  <textarea
+                    placeholder="Descripción"
+                    value={newEvent.descripcion}
+                    onChange={e => setNewEvent({ ...newEvent, descripcion: e.target.value })}
+                  />
+                  <button type="submit">Agregar Evento</button>
+                </form>
+              </div>
+
+              <div className="form-section">
+                <h2>Agregar Tipo de Suscripción</h2>
+                <form onSubmit={handleSubscriptionSubmit}>
+                  <input
+                    type="text"
+                    placeholder="Nombre"
+                    value={newSubscriptionType.nombre}
+                    onChange={e => setNewSubscriptionType({ ...newSubscriptionType, nombre: e.target.value })}
+                  />
+                  <input
+                    type="text"
+                    placeholder="Precio"
+                    value={newSubscriptionType.precio}
+                    onChange={e => setNewSubscriptionType({ ...newSubscriptionType, precio: e.target.value })}
+                  />
+                  <button type="submit">Agregar Tipo de Suscripción</button>
+                </form>
+              </div>
+            */}
           </div>
         </main>
       </div>
