@@ -1,7 +1,6 @@
 import "./Login.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import Layout from "../../components/Layout";
 import api from "../../api/axiosConfig";
 
@@ -9,34 +8,36 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleLogin = async () => {
     try {
+      // 1) Intentamos iniciar sesión
       const response = await api.post("/auth/login", {
         email,
         contraseña: password,
       });
 
-      const { access_token, user } = response.data;
-
-      // 1) Guardar token y user
+      // 2) Guardamos el token y preparamos el header
+      const { access_token } = response.data;
       localStorage.setItem("token", access_token);
       api.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
-      localStorage.setItem("user", JSON.stringify(user));
 
-      // 2) Redirigir según rol
-      if (user.rol.id_rol === 1) {
-        navigate("/admin");
+      // 3) Recuperamos el perfil (incluye role y roleId)
+      const profile = await api.get("/auth/profile");
+      const userData = profile.data; // { sub, email, role, roleId, ... }
+
+      // 4) Guardamos el usuario en localStorage
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      // 5) Redirigimos según el rol
+      if (userData.roleId === 1 || userData.role === "admin") {
+        navigate("/admin"); // ruta de tu panel de admin
       } else {
-        navigate("/home");
+        navigate("/home"); // ruta de usuarios normales
       }
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Credenciales inválidas. Por favor, inténtalo de nuevo.",
-        confirmButtonText: "OK",
-      });
+      setError("Credenciales inválidas. Por favor, inténtalo de nuevo.");
     }
   };
 
@@ -45,6 +46,8 @@ export default function Login() {
       <div className="login-container">
         <div className="login-box">
           <h1 className="login-title">Iniciar sesión</h1>
+
+          {error && <p className="login-error">{error}</p>}
 
           <form className="login-form" onSubmit={(e) => e.preventDefault()}>
             <label>Correo electrónico</label>
