@@ -12,31 +12,34 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      // 1) Intentamos iniciar sesión
       const response = await api.post("/auth/login", {
         email,
-        contraseña: password,
+        contraseña: password, // El backend espera "contraseña"
       });
 
-      // 2) Guardamos el token y preparamos el header
-      const { access_token } = response.data;
+      const { access_token, user } = response.data;
+
+      // Depuración: Verifica qué rol está devolviendo el backend
+      console.log("Rol del usuario:", user.rol.nombre);
+
+      // 1) Guardamos el token
       localStorage.setItem("token", access_token);
+
+      // 2) Inyectamos el header para las siguientes peticiones
       api.defaults.headers.common["Authorization"] = `Bearer ${access_token}`;
 
-      // 3) Recuperamos el perfil (incluye role y roleId)
+      // 3) Recuperamos el profile para extraer el userId
       const profile = await api.get("/auth/profile");
-      const userData = profile.data; // { sub, email, role, roleId, ... }
+      localStorage.setItem("user", JSON.stringify(profile.data));
 
-      // 4) Guardamos el usuario en localStorage
-      localStorage.setItem("user", JSON.stringify(userData));
-
-      // 5) Redirigimos según el rol
-      if (userData.roleId === 1 || userData.role === "admin") {
-        navigate("/admin"); // ruta de tu panel de admin
+      // 4) Redirigir según el rol del usuario
+      if (user.rol.nombre === "Administrador") {
+        navigate("/admin"); // Redirige al panel de administrador
       } else {
-        navigate("/home"); // ruta de usuarios normales
+        navigate("/home"); // Redirige al home para usuarios normales
       }
     } catch (err) {
+      console.error(err.response?.data || err.message); // Depuración del error
       setError("Credenciales inválidas. Por favor, inténtalo de nuevo.");
     }
   };
