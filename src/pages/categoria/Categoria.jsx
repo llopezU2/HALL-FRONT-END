@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { FaBars } from "react-icons/fa";
-import Navbar from "../../components/Navbar";
 import api from "../../api/axiosConfig";
 import Swal from "sweetalert2";
 import "./Categoria.css";
@@ -110,18 +109,33 @@ export default function Categoria() {
 
   return (
     <div className="categoria-wrapper">
-      <Navbar />
       <div className="categoria-content">
         {sidebarOpen && (
           <aside className="categoria-sidebar">
+            <div className="sidebar-logo">
+              <img
+                src="../src/img/LogoOficialGrande.png"
+                alt="Logo Oficial"
+                className="logo-img"
+              />            </div>
             <h3>Sección Categorías</h3>
             <ul>
+              <li>
+                <a class="nav-link active" href="/admin/categorias">Ver Categorías</a>
+              </li>
               <li>
                 <a href="/admin/suscripciones">Ver Suscripciones</a>
               </li>
               <li>
+                <a href="/admin/proveedores">Ver Proveedores</a>
+              </li>
+              <li>
+                <a href="/admin/key">Ver Keys</a>
+              </li>
+              <li>
                 <a href="/admin">Volver al Panel</a>
               </li>
+              
             </ul>
           </aside>
         )}
@@ -136,13 +150,13 @@ export default function Categoria() {
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
             />
-            <input
+            <textarea
               type="text"
               placeholder="Descripción"
               value={descripcion}
               onChange={(e) => setDescripcion(e.target.value)}
             />
-            <button type="submit">
+            <button className="submit-button" type="submit">
               {editing ? "Actualizar Categoría" : "Crear Categoría"}
             </button>
             {editing && (
@@ -186,9 +200,8 @@ export default function Categoria() {
 
           {showFabMenu && (
             <div
-              className={`categoria-fab-menu-container ${
-                fabMenuOpen ? "fade-in" : "fade-out"
-              }`}
+              className={`categoria-fab-menu-container ${fabMenuOpen ? "fade-in" : "fade-out"
+                }`}
             >
               <a href="/admin/suscripciones" className="categoria-fab-link">
                 Ver Suscripciones

@@ -4,7 +4,6 @@ import { FaUser, FaSignOutAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import api from "../../api/axiosConfig";
-import Navbar from "../../components/Navbar";
 import "./AdminPanel.css";
 
 export default function AdminPanel() {
@@ -150,11 +149,16 @@ export default function AdminPanel() {
 
   return (
     <div className="admin-wrapper">
-      <Navbar />
 
       <div className="admin-content">
         {sidebarOpen && (
           <aside className="admin-sidebar">
+            <div className="sidebar-logo">
+              <img
+                src="../src/img/LogoOficialGrande.png"
+                alt="Logo Oficial"
+                className="logo-img"
+              />            </div>
             <h3>Panel Admin</h3>
             <ul>
               <li>
@@ -162,6 +166,12 @@ export default function AdminPanel() {
               </li>
               <li>
                 <a href="/admin/suscripciones">Ver Suscripciones</a>
+              </li>
+              <li>
+                <a href="/admin/proveedores">Ver Proveedores</a>
+              </li>
+              <li>
+                <a href="/admin/key">Ver Keys</a>
               </li>
               <li>
                 <a href="/profile">
@@ -177,6 +187,7 @@ export default function AdminPanel() {
               </li>
             </ul>
           </aside>
+
         )}
 
         <main className={`admin-panel ${!sidebarOpen ? "no-sidebar" : ""}`}>

@@ -1,0 +1,163 @@
+/* Layout principal */
+.proveedores-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.proveedores-content {
+  display: flex;
+}
+
+/* Sidebar */
+.proveedores-sidebar {
+  width: 220px;
+  background-color: #1e293b;
+  padding: 2rem 1rem;
+  color: white;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  border-right: 1px solid #334155;
+  z-index: 1001;
+}
+
+.proveedores-sidebar h3 {
+  color: #38bdf8;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-size: large;
+}
+
+.proveedores-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.proveedores-sidebar li {
+  margin-bottom: 1rem;
+}
+
+.proveedores-sidebar a {
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.proveedores-sidebar a:hover,
+.proveedores-sidebar .nav-link.active {
+  color: #38bdf8;
+  font-weight: bold;
+}
+
+.proveedores-sidebar .proveedores-sidebar-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #ccc;
+}
+
+.proveedores-sidebar .proveedores-sidebar-logo img {
+  max-width: 100%;
+  height: auto;
+  max-height: 80px;
+  object-fit: contain;
+}
+
+/* Panel principal */
+.proveedores-panel {
+  padding: 2rem;
+  background: linear-gradient(to bottom, #0f172a, #1e293b);
+  color: #f1f5f9;
+  min-height: 100vh;
+  flex: 1;
+  margin-left: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.proveedores-panel h1 {
+  color: #38bdf8;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Formulario */
+.proveedores-form-section {
+  background-color: rgba(30, 41, 59, 0.85);
+  padding: 1.5rem 1.5rem 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 500px;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+}
+
+.proveedores-form-section h2 {
+  color: #38bdf8;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.proveedores-form-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.proveedores-form-section input {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #334155;
+  background-color: #0f172a;
+  color: #f1f5f9;
+  font-size: 0.95rem;
+}
+
+.proveedores-add-btn {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1.2rem;
+  width: 100%;
+}
+
+.proveedores-add-btn:hover {
+  background-color: #2563eb;
+}
+
+/* Tabla */
+.proveedores-list table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+  background-color: rgba(30, 41, 59, 0.85);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.proveedores-list th, .proveedores-list td {
+  padding: 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid #334155;
+}
+
+.proveedores-list th {
+  color: #38bdf8;
+  background-color: #1e293b;
+}
+
+.proveedores-list tr:last-child td {
+  border-bottom: none;
+}

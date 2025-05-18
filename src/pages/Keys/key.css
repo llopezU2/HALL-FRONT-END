@@ -1,0 +1,424 @@
+/* PANEL ADMIN KEYS */
+.key-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.key-content {
+  display: flex;
+}
+
+.active {
+  font-weight: bold;
+  color: rgb(106, 214, 209);
+}
+
+
+/* SIDEBAR */
+.key-sidebar {
+  width: 220px;
+  background-color: #1e293b;
+  padding: 2rem 1rem;
+  color: white;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  border-right: 1px solid #334155;
+  z-index: 1001;
+  transition: transform 0.3s ease;
+}
+
+.key-sidebar h3 {
+  color: #38bdf8;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-size: large;
+}
+
+.key-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.key-sidebar li {
+  margin-bottom: 1rem;
+}
+
+.key-sidebar a {
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.key-sidebar a:hover {
+  color: #ffffff;
+}
+
+.key-sidebar.show {
+  transform: translateX(0);
+}
+
+.key-sidebar.hide {
+  transform: translateX(-100%);
+}
+
+.key-sidebar .key-sidebar-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #ccc;
+}
+
+.key-sidebar .key-sidebar-logo img {
+  max-width: 100%;
+  height: auto;
+  max-height: 80px;
+  object-fit: contain;
+}
+
+/* CONTENIDO DEL PANEL */
+.key-panel {
+  padding: 2rem;
+  background: linear-gradient(to bottom, #0f172a, #1e293b);
+  color: #f1f5f9;
+  min-height: 100vh;
+  flex: 1;
+  margin-left: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.key-panel.no-sidebar {
+  margin-left: 0;
+}
+
+.key-panel h1 {
+  color: #38bdf8;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+/* FORMULARIOS */
+.key-form-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.key-form-section {
+  background-color: rgba(30, 41, 59, 0.85);
+  padding: 1.5rem 1.5rem 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 500px;
+  min-width: 320px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.key-form-section h2 {
+  color: #38bdf8;
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.key-form-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  height: auto;
+  min-height: 340px;
+  position: relative;
+}
+
+.key-form-section select,
+.key-form-section input {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #334155;
+  background-color: #0f172a;
+  color: #f1f5f9;
+  font-size: 0.95rem;
+}
+
+.key-form-section button[type="submit"] {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1.2rem;
+  width: auto;           /* Hace que el botón tenga solo el ancho de su contenido */
+}
+
+.key-form-section button[type="submit"]:hover {
+  background-color: #2563eb;
+}
+
+.key-filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.key-filters select,
+.key-filters input {
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #334155;
+  background-color: #0f172a;
+  color: #f1f5f9;
+  font-size: 0.95rem;
+}
+
+.key-list table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  background-color: rgba(30, 41, 59, 0.85);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.key-list th, .key-list td {
+  padding: 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid #334155;
+}
+
+.key-list th {
+  color: #38bdf8;
+  background-color: #1e293b;
+}
+
+.key-list tr:last-child td {
+  border-bottom: none;
+}
+
+/* Fila para formulario y filtros */
+.key-form-filters-row {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Filtros a la derecha del formulario */
+.key-filters-side {
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 260px;
+  max-width: 320px;
+  width: 100%;
+  margin-top: 2.2rem;
+  gap: 1rem;
+  display: flex;
+}
+
+/* Botón fuera del formulario */
+.key-add-btn {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1.2rem;
+  width: 100%;
+}
+
+.key-add-btn:hover {
+  background-color: #2563eb;
+}
+
+/* FAB y menú flotante para móvil */
+.key-fab-toggle {
+  position: fixed;
+  top: 50%;
+  right: -1.5rem;
+  transform: translateY(-50%);
+  background-color: #38bdf8;
+  color: white;
+  border: none;
+  border-radius: 8px 0 0 8px;
+  padding: 0.8rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 1500;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .key-fab-toggle {
+    display: block;
+  }
+  .key-panel {
+    margin-left: 0;
+  }
+  .key-sidebar {
+    position: fixed;
+    z-index: 1001;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    transition: transform 0.3s ease;
+  }
+}
+
+.key-floating-button-container {
+  position: fixed;
+  top: 50%;
+  right: 1.5rem;
+  transform: translateY(-50%);
+  z-index: 1500;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.key-fab-menu {
+  background-color: #1e293b;
+  margin-bottom: 10rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 0.5rem 0;
+  width: 180px;
+  animation: key-fadeInSlide 0.3s ease-out;
+}
+
+@keyframes key-fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes key-fadeOutSlide {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.key-fab-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  color: #f1f5f9;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background-color: transparent;
+  transition: background-color 0.2s ease, padding-left 0.2s ease;
+  border-left: 4px solid transparent;
+}
+
+.key-fab-link:hover {
+  background-color: #334155;
+  padding-left: 1.4rem;
+  border-left: 4px solid #38bdf8;
+}
+
+.key-fab-menu.fade-in {
+  animation: key-fadeInSlide 0.3s ease-out;
+}
+
+.key-fab-menu.fade-out {
+  animation: key-fadeOutSlide 0.25s ease-in;
+}
+
+/* Responsive para fila de formulario y filtros */
+@media (max-width: 1024px) {
+  .key-form-filters-row {
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+  .key-filters-side {
+    margin-top: 0;
+    max-width: 100%;
+    width: 100%;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: flex-start;
+  }
+}
+
+/* Responsive para el formulario */
+@media (max-width: 600px) {
+  .key-panel {
+    padding: 1rem;
+  }
+  .key-form-section {
+    max-width: 100%;
+    min-width: 0;
+    padding: 1rem 0.5rem 0.5rem;
+  }
+  .key-form-container {
+    padding: 0;
+    gap: 1rem;
+  }
+  .key-list table {
+    min-width: 600px;
+    font-size: 0.92rem;
+  }
+}
+
+/* Tabla responsive: scroll horizontal en móviles */
+@media (max-width: 900px) {
+  .key-list {
+    width: 100%;
+    overflow-x: auto;
+  }
+  .key-list table {
+    min-width: 600px;
+  }
+}
+
+/* Sidebar responsive: ya tienes reglas, pero ajusta si quieres ocultar en móvil */
+@media (max-width: 768px) {
+  .key-sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 180px;
+    padding: 1rem 0.5rem;
+    z-index: 1001;
+    transform: translateX(-100%);
+  }
+  .key-sidebar.show {
+    transform: translateX(0);
+  }
+  .key-panel {
+    margin-left: 0;
+  }
+}

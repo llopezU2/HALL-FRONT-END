@@ -8,6 +8,8 @@ import Juego from "./pages/Juego/Juego";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Solicitudes from "./pages/solicitudes/solicitudes";
 import Categoria from "./pages/categoria/categoria";
+import KeyManager from "./pages/Keys/key";
+import Proveedores from "./pages/Proveedores/proveedores";
 
 function App() {
   return (
@@ -58,6 +60,12 @@ function App() {
 
         {/* Categoria */}
         <Route path="/admin/categorias" element={<Categoria />} />
+
+        {/* Keys */}
+        <Route path="/admin/key" element={<KeyManager />} />
+
+        {/* Proveedores */}
+        <Route path="/admin/proveedores" element={<Proveedores />} />
 
         {/* Ruta por defecto (redirección al login si la URL no existe) */}
         <Route path="*" element={<Login />} />
