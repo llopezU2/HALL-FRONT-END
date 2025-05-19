@@ -442,7 +442,7 @@ const KeyManager = () => {
               Total de keys para el juego seleccionado: {selectedGameCount || 0}
             </div>
           )}
-          {/* Tabla de keys (sin mostrar la key ni la cantidad) */}
+          {/* Tabla de keys */}
           <div className="key-list">
             <table>
               <thead>
