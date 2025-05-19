@@ -433,6 +433,8 @@ const KeyManager = () => {
               />
             </div>
           </div>
+          {/* Mensaje de conteo de keys para el juego seleccionado */}
+          {/* Solo se muestra si hay un juego seleccionado */}
           {filters.game && (
             <div
               style={{ margin: "16px 0", fontWeight: "bold", color: "#00bfff" }}
