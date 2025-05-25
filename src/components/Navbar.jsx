@@ -25,6 +25,7 @@ export default function Navbar({ onToggleSidebar }) {
   const [searchTerm, setSearchTerm] = useState("");
   const searchRef = useRef(null);
   const [pendingSolicitudes, setPendingSolicitudes] = useState(0);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 
   // Fetch solicitudes pendientes (solo para no-admin)
   useEffect(() => {
@@ -90,16 +91,16 @@ export default function Navbar({ onToggleSidebar }) {
             {!isMobile && (
               <div className="navbar-center">
                 <div className="platforms">
-                  <Link to="/plataforma/playstation" className="platform">
+                  <Link to="/plataforma/1" className="platform">
                     <i className="fab fa-playstation"></i> PlayStation
                   </Link>
-                  <Link to="/plataforma/xbox" className="platform">
+                  <Link to="/plataforma/2" className="platform">
                     <i className="fab fa-xbox"></i> Xbox
                   </Link>
-                  <Link to="/plataforma/nintendo" className="platform">
+                  <Link to="/plataforma/3" className="platform">
                     <i className="fas fa-gamepad"></i> Nintendo
                   </Link>
-                  <Link to="/plataforma/pc" className="platform">
+                  <Link to="/plataforma/4" className="platform">
                     <i className="fas fa-desktop"></i> PC
                   </Link>
                 </div>
@@ -141,16 +142,50 @@ export default function Navbar({ onToggleSidebar }) {
                 ))}
 
               {isAuth && (
-                <Link to="/profile" className="navbar-link">
-                  <img
-                    src={
-                      user?.foto ||
-                      `https://ui-avatars.com/api/?name=${user?.nombre}&background=3b82f6&color=fff`
-                    }
-                    alt="Perfil"
-                    className="navbar-profile-img"
-                  />
-                </Link>
+                <div
+                  className="navbar-user-dropdown"
+                  tabIndex={0}
+                  onBlur={() =>
+                    setTimeout(() => setIsUserDropdownOpen(false), 150)
+                  }
+                >
+                  <button
+                    className="navbar-link navbar-profile-btn"
+                    onClick={() => setIsUserDropdownOpen((open) => !open)}
+                  >
+                    <img
+                      src={
+                        user?.foto ||
+                        `https://ui-avatars.com/api/?name=${user?.nombre}&background=3b82f6&color=fff`
+                      }
+                      alt="Perfil"
+                      className="navbar-profile-img"
+                    />
+                    <i className="fas fa-caret-down navbar-caret"></i>
+                  </button>
+                  {isUserDropdownOpen && (
+                    <div className="navbar-dropdown-menu">
+                      <Link
+                        to="/profile"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                      >
+                        Mi perfil
+                      </Link>
+                      <Link
+                        to="/biblioteca-usuario"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                      >
+                        Ver mi biblioteca
+                      </Link>
+                      <Link
+                        to="/suscrip-usuario"
+                        onClick={() => setIsUserDropdownOpen(false)}
+                      >
+                        Suscripciones
+                      </Link>
+                    </div>
+                  )}
+                </div>
               )}
 
               {isAuth && (
@@ -170,6 +205,16 @@ export default function Navbar({ onToggleSidebar }) {
               {!isMobile && isAuth && (
                 <button onClick={handleLogout} className="navbar-button-logout">
                   Cerrar sesión
+                </button>
+              )}
+
+              {/* Botón de inicio de sesión (solo si no está autenticado) */}
+              {!isAuth && (
+                <button
+                  className="navbar-button-login"
+                  onClick={() => navigate("/login")}
+                >
+                  Iniciar sesión
                 </button>
               )}
             </div>

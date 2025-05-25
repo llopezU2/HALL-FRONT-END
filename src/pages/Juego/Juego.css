@@ -1,6 +1,12 @@
 body {
-  background-color: #1e293b; /* Fondo oscuro similar al de Home */
-  color: white;
+background: linear-gradient(
+      135deg,
+      #0f172a 0%,
+      #1e3a8a 15%,
+      #6366f1 75%,
+      #1e1b4b 100%
+    );  
+    color: white;
   font-family: 'Arial', sans-serif;
 }
 
@@ -8,25 +14,25 @@ body {
   padding: 3rem 2rem;
   text-align: center;
   color: white;
-  background-color: #0f172a;  /* Fondo oscuro similar al de Home */
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .juego-portada {
   width: 100%;
-  max-width: 600px;
+  max-width: 700px;
   height: auto;
   display: block;
   margin: 0 auto;
   border-radius: 8px;
+  margin-top: 3.5rem;
 }
 
 
 .juego-title {
   font-size: 2rem;
   font-weight: bold;
-  color: #60a5fa;
+  color: #e1e5eb;
 }
 
 .juego-description {
@@ -78,5 +84,16 @@ body {
 
 .juego-actions .btn-carrito:hover {
   background-color: #3b82f6;
+}
+
+/* Animación fade-in para la vista del juego */
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.fade-in.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 

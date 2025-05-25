@@ -1,0 +1,35 @@
+.juegos-agg-wrapper {
+  padding: 2rem;
+  background: #1e293b;
+  border-radius: 12px;
+  margin: 2rem auto;
+  max-width: 900px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+}
+
+.juegos-agg-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+.juegos-agg-table th,
+.juegos-agg-table td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid #334155;
+  text-align: left;
+}
+
+.juegos-agg-table th {
+  background: #38bdf8;
+  color: #fff;
+}
+
+.juegos-agg-loading,
+.juegos-agg-empty {
+  color: #38bdf8;
+  text-align: center;
+  margin-top: 2rem;
+}

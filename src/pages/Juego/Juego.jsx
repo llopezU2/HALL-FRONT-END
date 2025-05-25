@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // Agrega useNavigate
 import { useState, useEffect } from "react";
 import api from "../../api/axiosConfig";
 import Navbar from "../../components/Navbar";
@@ -7,10 +7,13 @@ import "./Juego.css";
 
 export default function Juego() {
   const { id } = useParams();
+  const navigate = useNavigate(); // Inicializa el hook
   const [gameDetails, setGameDetails] = useState(null);
   const [relatedGames, setRelatedGames] = useState([]);
+  const [fadeIn, setFadeIn] = useState(false);
 
   useEffect(() => {
+    setFadeIn(false);
     // Traer detalles del juego
     api
       .get(`/juego/${id}`)
@@ -22,6 +25,10 @@ export default function Juego() {
       .get("/juego/recomendados")
       .then((res) => setRelatedGames(res.data))
       .catch((err) => console.error("Error al cargar recomendados:", err));
+
+    // Activa el fade-in después de montar
+    const timeout = setTimeout(() => setFadeIn(true), 10);
+    return () => clearTimeout(timeout);
   }, [id]);
 
   if (!gameDetails) {
@@ -37,7 +44,7 @@ export default function Juego() {
       }`;
 
   return (
-    <div className="juego-container">
+    <div className={`juego-container fade-in${fadeIn ? " show" : ""}`}>
       <Navbar />
 
       <div className="juego-details">
@@ -54,11 +61,16 @@ export default function Juego() {
         <p className="juego-description">{gameDetails.descripcion}</p>
 
         {gameDetails.precio != null && (
-          <p className="juego-precio">{gameDetails.precio.toFixed(2)} €</p>
+          <p className="juego-precio">{gameDetails.precio.toFixed(2)} $</p>
         )}
 
         <div className="juego-actions">
-          <button className="styled-buy-button">Comprar ahora</button>
+          <button
+            className="styled-buy-button"
+            onClick={() => navigate(`/compra/${gameDetails.id_juego}`)}
+          >
+            Comprar ahora
+          </button>
         </div>
       </div>
 

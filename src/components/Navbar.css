@@ -188,6 +188,23 @@
   background-color: #dc2626;
 }
 
+.navbar-button-login {
+  background: #38bdf8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 1rem;
+  transition: background 0.18s;
+}
+
+.navbar-button-login:hover {
+  background: #0ea5e9;
+}
+
 .platform {
   font-size: 0.95rem;
   color: #cbd5e1;
@@ -451,4 +468,57 @@
     font-size: 1.5rem;
     cursor: pointer;
   }
+}
+
+.navbar-user-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.navbar-profile-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-caret {
+  margin-left: 0.4rem;
+  color: #38bdf8;
+  font-size: 1rem;
+}
+
+.navbar-dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 110%;
+  background: #1e293b;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  min-width: 170px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+  animation: fadeInDropdown 0.18s;
+}
+
+@keyframes fadeInDropdown {
+  from { opacity: 0; transform: translateY(-8px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+.navbar-dropdown-menu a {
+  color: #f1f5f9;
+  text-decoration: none;
+  padding: 0.7rem 1.2rem;
+  transition: background 0.18s;
+  font-size: 1rem;
+}
+
+.navbar-dropdown-menu a:hover {
+  background: #334155;
+  color: #38bdf8;
 }

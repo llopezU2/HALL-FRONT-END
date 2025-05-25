@@ -10,24 +10,28 @@ import Solicitudes from "./pages/solicitudes/solicitudes";
 import Categoria from "./pages/categoria/categoria";
 import KeyManager from "./pages/Keys/key";
 import Proveedores from "./pages/Proveedores/proveedores";
+import BibliotecaUsuario from "./pages/BibliotecaUsuario/BibliotecaUsuario";
+import SuscripUsuario from "./pages/SuscripUsuario/SuscripUsuario";
+import Plataforma from "./pages/Plataforma/Plataforma";
+import CompraUsuario from "./pages/CompraUsuario/CompraUsuario";
+import Pago from "./pages/Pago/Pago";
+import JuegoAgg from "./pages/JuegoAgg/JuegoAgg";
 
 function App() {
   return (
     <Router>
       <Routes>
         {/* Rutas públicas */}
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/plataforma/:id_plataforma" element={<Plataforma />} />
+        <Route path="/juego/:id" element={<Juego />} />
+        <Route path="/compra/:id" element={<CompraUsuario />} />
+        <Route path="/pago/:id" element={<Pago />} />
 
         {/* Rutas protegidas */}
-        <Route
-          path="/home"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
         <Route
           path="/solicitudes"
           element={
@@ -44,31 +48,32 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-        {/* Ruta del juego con dinámico ID */}
         <Route
-          path="/juego/:id"
+          path="/biblioteca-usuario"
           element={
             <ProtectedRoute>
-              <Juego /> {/* Vista del juego */}
+              <BibliotecaUsuario />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/suscrip-usuario"
+          element={
+            <ProtectedRoute>
+              <SuscripUsuario />
             </ProtectedRoute>
           }
         />
 
-        {/* Ruta para el Panel de Administración (Admin) */}
+        {/* Rutas admin */}
         <Route path="/admin" element={<AdminPanel />} />
-
-        {/* Categoria */}
         <Route path="/admin/categorias" element={<Categoria />} />
-
-        {/* Keys */}
         <Route path="/admin/key" element={<KeyManager />} />
-
-        {/* Proveedores */}
         <Route path="/admin/proveedores" element={<Proveedores />} />
+        <Route path="/admin/juegos" element={<JuegoAgg />} />
 
-        {/* Ruta por defecto (redirección al login si la URL no existe) */}
-        <Route path="*" element={<Login />} />
+        {/* Ruta por defecto: Home */}
+        <Route path="*" element={<Home />} />
       </Routes>
     </Router>
   );

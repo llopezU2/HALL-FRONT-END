@@ -12,7 +12,7 @@ export default function GameCard({ id, titulo, precio, descripcion, imagen }) {
       <div className="game-card-content">
         <h3 className="game-card-title">{titulo}</h3>
         <p className="game-card-description">{descripcion}</p>
-        <span className="game-card-price">{precio} €</span>
+        <span className="game-card-price">{precio} $</span>
       </div>
     </Link>
   );

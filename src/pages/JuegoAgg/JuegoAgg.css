@@ -1,0 +1,166 @@
+.juegos-agg-usuario-wrapper {
+  padding: 2.5rem 1rem 1rem 1rem;
+  min-height: 100vh;
+  color: #f1f5f9;
+  /* Asegura que el contenido no quede debajo de la sidebar */
+  margin-left: 90px;
+  width: calc(100% - 220px);
+  box-sizing: border-box;
+}
+
+.juegos-agg-usuario-wrapper h1 {
+  margin-top: 1.5rem;
+  color: #38bdf8;
+  font-size: 2.2rem;
+  margin-bottom: 6rem;
+  text-align: center;
+}
+
+.juegos-agg-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  margin: 0 auto;
+  justify-items: stretch;
+}
+
+.juegos-agg-card {
+  background: #1e293b;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.18s, box-shadow 0.18s;
+}
+
+.juegos-agg-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(56,189,248,0.13);
+}
+
+.juegos-agg-card-img {
+  width: 100%;
+  height: 180px;
+  background: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.juegos-agg-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.juegos-agg-card-body {
+  padding: 1.2rem 1rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.juegos-agg-card-body h2 {
+  color: #38bdf8;
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+.juegos-agg-card-desc {
+  font-size: 1rem;
+  color: #cbd5e1;
+  margin-bottom: 0.5rem;
+}
+
+.juegos-agg-card-info {
+  font-size: 0.98rem;
+  color: #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.juegos-agg-card-actions {
+  display: flex;
+  gap: 0.7rem;
+  margin-top: 0.7rem;
+}
+
+.juegos-agg-btn {
+  padding: 0.4rem 1.1rem;
+  border-radius: 6px;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.juegos-agg-btn.editar {
+  background: #38bdf8;
+  color: #fff;
+}
+
+.juegos-agg-btn.eliminar {
+  background: #ef4444;
+  color: #fff;
+}
+
+.juegos-agg-btn.guardar {
+  background: #22c55e;
+  color: #fff;
+}
+
+.juegos-agg-btn.cancelar {
+  background: #64748b;
+  color: #fff;
+}
+
+.juegos-agg-edit-input,
+.juegos-agg-edit-textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #64748b;
+  background: #0f172a;
+  color: #f1f5f9;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.juegos-agg-edit-textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+.juegos-agg-edit-actions {
+  display: flex;
+  gap: 0.7rem;
+  margin-top: 0.5rem;
+}
+
+.juegos-agg-loading,
+.juegos-agg-empty {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #38bdf8;
+  margin-top: 2rem;
+}
+
+/* Agrega esto a tu AdminPanel.css o mantenlo en JuegoAgg.css si prefieres */
+/* Resalta la opción activa en la sidebar */
+.admin-sidebar a.active {
+  font-weight: bold;
+  color: rgb(106, 214, 209);
+}
+
+@media (max-width: 900px) {
+  .juegos-agg-usuario-wrapper {
+    margin-left: 0;
+    width: 100%;
+    padding: 2.5rem 0.5rem 1rem 0.5rem;
+  }
+}

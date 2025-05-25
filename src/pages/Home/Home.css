@@ -305,12 +305,26 @@
   background-color: #dc2626;
 }
 
+.fade-in {
+  animation: fadeInView 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeInView {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 .promo-descripcion {
   font-size: 1rem;
   line-height: 1.5;
   margin-bottom: 1rem;
-  color: #e5e7eb; 
+  color: #e5e7eb;
 }
 
 .promo-categoria {

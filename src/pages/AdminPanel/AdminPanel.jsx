@@ -149,7 +149,6 @@ export default function AdminPanel() {
 
   return (
     <div className="admin-wrapper">
-
       <div className="admin-content">
         {sidebarOpen && (
           <aside className="admin-sidebar">
@@ -172,6 +171,9 @@ export default function AdminPanel() {
               </li>
               <li>
                 <a href="/admin/key">Ver Keys</a>
+              </li>
+              <li>
+                <a href="/admin/juegos">Ver Juegos</a> {/* <-- NUEVO */}
               </li>
               <li>
                 <a href="/profile">

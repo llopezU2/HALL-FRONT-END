@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // <-- Importa aquí
 import Layout from "../../components/Layout";
 import GameCardList from "../../components/GameCardList";
 import api from "../../api/axiosConfig";
@@ -10,6 +11,7 @@ export default function Home() {
   const [heroGames, setHeroGames] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [modalUsuario, setModalUsuario] = useState(null);
+  const navigate = useNavigate(); // <-- Inicializa aquí
 
   // Carga inicial de datos
   useEffect(() => {
@@ -53,7 +55,7 @@ export default function Home() {
 
   return (
     <Layout>
-      <div className="home-container">
+      <div className="home-container fade-in">
         {/* HERO */}
         <div className="home-hero">
           <AnimatePresence>
@@ -91,7 +93,14 @@ export default function Home() {
                     <p className="promo-categoria">
                       {heroGame.categoriaNombre}
                     </p>
-                    <button className="styled-buy-button">Ver juego</button>
+                    <button
+                      className="styled-buy-button"
+                      onClick={() =>
+                        heroGame && navigate(`/juego/${heroGame.id_juego}`)
+                      }
+                    >
+                      Ver juego
+                    </button>
                   </>
                 )}
               </div>
