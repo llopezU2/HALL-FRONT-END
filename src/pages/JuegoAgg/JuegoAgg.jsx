@@ -11,7 +11,10 @@ export default function JuegoAgg() {
 
   // Para edición rápida
   const [editId, setEditId] = useState(null);
-  const [editData, setEditData] = useState({ titulo: "", descripcion: "", precio: "" });
+  const [editData, setEditData] = useState({
+    titulo: "",
+    descripcion: "",
+  });
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -27,8 +30,9 @@ export default function JuegoAgg() {
 
   const fetchJuegos = () => {
     setLoading(true);
-    api.get("/juego/con-portadas")
-      .then(res => {
+    api
+      .get("/juego/con-portadas")
+      .then((res) => {
         setJuegos(Array.isArray(res.data) ? res.data : []);
         console.log("Respuesta juegos:", res.data); // <-- AGREGA ESTO
       })
@@ -36,22 +40,11 @@ export default function JuegoAgg() {
       .finally(() => setLoading(false));
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("¿Seguro que deseas eliminar este juego?")) return;
-    try {
-      await api.delete(`/juego/${id}`);
-      setJuegos(juegos.filter(j => j.id_juego !== id));
-    } catch {
-      alert("Error al eliminar el juego.");
-    }
-  };
-
   const handleEdit = (juego) => {
     setEditId(juego.id_juego);
     setEditData({
       titulo: juego.titulo,
       descripcion: juego.descripcion,
-      precio: juego.precio,
     });
   };
 
@@ -61,10 +54,9 @@ export default function JuegoAgg() {
 
   const handleEditSave = async (id) => {
     try {
-      await api.put(`/juego/${id}`, {
+      await api.patch(`/juego/${id}`, {
         titulo: editData.titulo,
         descripcion: editData.descripcion,
-        precio: editData.precio,
       });
       setEditId(null);
       fetchJuegos();
@@ -102,27 +94,46 @@ export default function JuegoAgg() {
             <h3>Panel Admin</h3>
             <ul>
               <li>
-                <a href="/admin/categorias" className={activePath === "/admin/categorias" ? "active" : ""}>
+                <a
+                  href="/admin/categorias"
+                  className={activePath === "/admin/categorias" ? "active" : ""}
+                >
                   Ver Categorías
                 </a>
               </li>
               <li>
-                <a href="/admin/suscripciones" className={activePath === "/admin/suscripciones" ? "active" : ""}>
+                <a
+                  href="/admin/suscripciones"
+                  className={
+                    activePath === "/admin/suscripciones" ? "active" : ""
+                  }
+                >
                   Ver Suscripciones
                 </a>
               </li>
               <li>
-                <a href="/admin/proveedores" className={activePath === "/admin/proveedores" ? "active" : ""}>
+                <a
+                  href="/admin/proveedores"
+                  className={
+                    activePath === "/admin/proveedores" ? "active" : ""
+                  }
+                >
                   Ver Proveedores
                 </a>
               </li>
               <li>
-                <a href="/admin/key" className={activePath === "/admin/key" ? "active" : ""}>
+                <a
+                  href="/admin/key"
+                  className={activePath === "/admin/key" ? "active" : ""}
+                >
                   Ver Keys
                 </a>
               </li>
               <li>
-                <a href="/admin/juegos" className={activePath === "/admin/juegos" ? "active" : ""}>
+                <a
+                  href="/admin/juegos"
+                  className={activePath === "/admin/juegos" ? "active" : ""}
+                >
                   Ver Juegos
                 </a>
               </li>
@@ -130,7 +141,10 @@ export default function JuegoAgg() {
                 <a href="/admin">Volver al Panel</a>
               </li>
               <li>
-                <a href="/profile" className={activePath === "/profile" ? "active" : ""}>
+                <a
+                  href="/profile"
+                  className={activePath === "/profile" ? "active" : ""}
+                >
                   <FaUser style={{ marginRight: 8 }} />
                   Perfil
                 </a>
@@ -153,14 +167,22 @@ export default function JuegoAgg() {
             ) : juegos.length === 0 ? (
               <div className="juegos-agg-empty">No hay juegos registrados.</div>
             ) : (
-              <div className="juegos-agg-cards-container" style={{ display: "flex", flexWrap: "wrap", gap: "2rem", justifyContent: "center" }}>
+              <div
+                className="juegos-agg-cards-container"
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "2rem",
+                  justifyContent: "center",
+                }}
+              >
                 {juegos.map((juego) => (
                   <div className="biblioteca-card" key={juego.id_juego}>
                     <div className="biblioteca-card-img">
                       <img
                         src={
-                          juego.portada
-                            ? `${import.meta.env.VITE_API_URL}${juego.portada.startsWith("/") ? juego.portada : `/${juego.portada}`}`
+                          juego.portada?.startsWith("http")
+                            ? juego.portada
                             : "/img/placeholder-game.png"
                         }
                         alt={juego.titulo}
@@ -182,33 +204,43 @@ export default function JuegoAgg() {
                             onChange={handleEditChange}
                             className="juegos-agg-edit-textarea"
                           />
-                          <input
-                            type="text"
-                            name="precio"
-                            value={editData.precio}
-                            onChange={handleEditChange}
-                            className="juegos-agg-edit-input"
-                          />
                           <div className="juegos-agg-edit-actions">
-                            <button onClick={() => handleEditSave(juego.id_juego)} className="juegos-agg-btn guardar">Guardar</button>
-                            <button onClick={handleEditCancel} className="juegos-agg-btn cancelar">Cancelar</button>
+                            <button
+                              onClick={() => handleEditSave(juego.id_juego)}
+                              className="juegos-agg-btn guardar"
+                            >
+                              Guardar
+                            </button>
+                            <button
+                              onClick={handleEditCancel}
+                              className="juegos-agg-btn cancelar"
+                            >
+                              Cancelar
+                            </button>
                           </div>
                         </>
                       ) : (
                         <>
                           <h2>{juego.titulo}</h2>
-                          <p className="biblioteca-card-desc">{juego.descripcion}</p>
+                          <p className="biblioteca-card-desc">
+                            {juego.descripcion}
+                          </p>
                           <div className="biblioteca-card-info">
                             <span>
-                              <b>Categoría:</b> {juego.categoria?.nombre || "Sin categoría"}
+                              <b>Categoría:</b>{" "}
+                              {juego.categoria?.nombre || "Sin categoría"}
                             </span>
                             <span>
                               <b>Precio:</b> ${juego.precio}
                             </span>
                           </div>
                           <div className="juegos-agg-card-actions">
-                            <button onClick={() => handleEdit(juego)} className="juegos-agg-btn editar">Editar</button>
-                            <button onClick={() => handleDelete(juego.id_juego)} className="juegos-agg-btn eliminar">Eliminar</button>
+                            <button
+                              onClick={() => handleEdit(juego)}
+                              className="juegos-agg-btn editar"
+                            >
+                              Editar
+                            </button>
                           </div>
                         </>
                       )}

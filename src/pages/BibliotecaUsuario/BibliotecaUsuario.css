@@ -1,5 +1,4 @@
 .biblioteca-usuario-wrapper {
-  
   padding: 2.5rem 1rem 1rem 1rem;
   min-height: 100vh;
   background: linear-gradient(to bottom, #0f172a, #324b77);
@@ -24,7 +23,7 @@
 .biblioteca-card {
   background: #1e293b;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
   width: 320px;
   display: flex;
   flex-direction: column;
@@ -34,7 +33,7 @@
 
 .biblioteca-card:hover {
   transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 8px 32px rgba(56,189,248,0.13);
+  box-shadow: 0 8px 32px rgba(56, 189, 248, 0.13);
 }
 
 .biblioteca-card-img {
@@ -93,4 +92,32 @@
   font-size: 1.2rem;
   color: #38bdf8;
   margin-top: 2rem;
+}
+
+.modal-key-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 1rem;
+}
+
+.modal-key-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1e293b;
+  padding: 0.6rem 1rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  border-bottom: 1px solid #334155;
+}
+
+.key-text {
+  color: #f8fafc;
+  font-weight: 500;
+  font-family: monospace;
+}
+
+.platform-name {
+  color: #38bdf8;
+  font-weight: bold;
 }
