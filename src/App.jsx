@@ -28,8 +28,6 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/plataforma/:id_plataforma" element={<Plataforma />} />
         <Route path="/juego/:id" element={<Juego />} />
-        <Route path="/compra/:id" element={<CompraUsuario />} />
-        <Route path="/pago/:id" element={<Pago />} />
 
         {/* Rutas protegidas */}
         <Route
@@ -65,12 +63,76 @@ function App() {
           }
         />
 
+        <Route
+          path="/compra/:id"
+          element={
+            <ProtectedRoute>
+              <CompraUsuario />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/pago/:id"
+          element={
+            <ProtectedRoute>
+              <Pago />
+            </ProtectedRoute>
+          }
+        />
+
         {/* Rutas admin */}
-        <Route path="/admin" element={<AdminPanel />} />
-        <Route path="/admin/categorias" element={<Categoria />} />
-        <Route path="/admin/key" element={<KeyManager />} />
-        <Route path="/admin/proveedores" element={<Proveedores />} />
-        <Route path="/admin/juegos" element={<JuegoAgg />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminPanel />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/categorias"
+          element={
+            <ProtectedRoute>
+              <Categoria />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/key"
+          element={
+            <ProtectedRoute>
+              <KeyManager />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/key"
+          element={
+            <ProtectedRoute>
+              <KeyManager />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/proveedores"
+          element={
+            <ProtectedRoute>
+              <Proveedores />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/juegos"
+          element={
+            <ProtectedRoute>
+              <JuegoAgg />
+            </ProtectedRoute>
+          }
+        />
 
         {/* Ruta por defecto: Home */}
         <Route path="*" element={<Home />} />
