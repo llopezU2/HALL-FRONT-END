@@ -16,6 +16,7 @@ import Plataforma from "./pages/Plataforma/Plataforma";
 import CompraUsuario from "./pages/CompraUsuario/CompraUsuario";
 import Pago from "./pages/Pago/Pago";
 import JuegoAgg from "./pages/JuegoAgg/JuegoAgg";
+import HallPlus from "./pages/HallPlus/HallPlus";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/plataforma/:id_plataforma" element={<Plataforma />} />
         <Route path="/juego/:id" element={<Juego />} />
+        <Route path="/hall-plus" element={<HallPlus />} />
 
         {/* Rutas protegidas */}
         <Route

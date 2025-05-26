@@ -1,5 +1,5 @@
 .navbar {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   background-color: rgba(15, 23, 42, 0.3);
   /* más transparente */
   backdrop-filter: blur(12px);
@@ -20,8 +20,6 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   z-index: 999;
 }
-
-
 
 /* IZQUIERDA: logo y nombre */
 .navbar-left {
@@ -45,8 +43,6 @@
   }
 }
 
-
-
 .navbar-name {
   font-size: 1.5rem;
   font-weight: 700;
@@ -67,8 +63,6 @@
   min-width: 0;
   max-width: 100%;
 }
-
-
 
 .platforms {
   display: flex;
@@ -125,7 +119,6 @@
   flex-shrink: 0;
 }
 
-
 .navbar-search-input {
   position: absolute;
   top: 50%;
@@ -151,8 +144,6 @@
   opacity: 1;
   padding: 0.6rem 1rem;
 }
-
-
 
 .search-toggle {
   background: none;
@@ -253,7 +244,6 @@
   /* borde para contraste */
 }
 
-
 /* MENÚ HAMBURGUESA EN MÓVIL */
 
 @media (max-width: 768px) {
@@ -307,7 +297,6 @@
     align-items: center;
     z-index: 2000;
   }
-
 
   /* Buscador embebido se oculta en móviles */
   .navbar-search-input {
@@ -374,7 +363,6 @@
     animation: slideDown 0.3s ease-in-out;
     background-color: rgba(30, 41, 59, 0.95);
     /* azul oscuro semitransparente */
-
   }
 
   @keyframes slideDown {
@@ -430,8 +418,6 @@
     position: relative;
     width: 100%;
   }
-
-
 }
 
 /* Ocultar sidebar por defecto en pantallas pequeñas */
@@ -496,7 +482,7 @@
   top: 110%;
   background: #1e293b;
   border-radius: 8px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
   min-width: 170px;
   z-index: 100;
   display: flex;
@@ -506,8 +492,14 @@
 }
 
 @keyframes fadeInDropdown {
-  from { opacity: 0; transform: translateY(-8px);}
-  to { opacity: 1; transform: translateY(0);}
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .navbar-dropdown-menu a {
@@ -521,4 +513,48 @@
 .navbar-dropdown-menu a:hover {
   background: #334155;
   color: #38bdf8;
+}
+
+.hallplus-premium-button {
+  background: linear-gradient(135deg, #facc15, #f59e0b);
+  color: #1f2937;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 0.95rem;
+  margin-right: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hallplus-premium-button i {
+  color: #d97706;
+  font-size: 1rem;
+}
+
+.hallplus-text {
+  font-weight: 700;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.hallplus-plus {
+  font-size: 1.4rem;
+  color: #ef4444;
+  margin-left: 4px;
+  line-height: 1;
+  position: relative;
+  top: -1px; /* <-- ajuste vertical sutil */
+  text-shadow: 0 0 6px rgba(255, 0, 0, 0.5);
+}
+
+.hallplus-premium-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
 }

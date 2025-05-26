@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import api from "../../api/axiosConfig";
 import "./SuscripUsuario.css";
 import Navbar from "../../components/Navbar";
+import Swal from "sweetalert2";
 
 const SuscripUsuario = () => {
-  const [suscripciones, setSuscripciones] = useState([]);
+  const [suscripcionActiva, setSuscripcionActiva] = useState(null);
+  const [historial, setHistorial] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const storedUser = localStorage.getItem("user");
@@ -14,31 +16,45 @@ const SuscripUsuario = () => {
   useEffect(() => {
     const fetchSuscripciones = async () => {
       try {
-        const res = await api.get(`/suscripcion/${userId}`);
-        console.log("Respuesta del backend:", res.data);
-        setSuscripciones(res.data);
+        const [resActiva, resHistorial] = await Promise.all([
+          api.get(`/suscripcion/${userId}/activa`),
+          api.get(`/suscripcion/${userId}/historial`),
+        ]);
+        setSuscripcionActiva(resActiva.data);
+        setHistorial(resHistorial.data);
       } catch (err) {
         console.error("Error al cargar suscripciones:", err);
-        setSuscripciones([]);
       } finally {
         setLoading(false);
       }
     };
+
     if (userId) fetchSuscripciones();
   }, [userId]);
 
   const cancelarRenovacion = async () => {
     try {
-      const res = await api.post("/suscripcion/cancelar-renovacion", {
+      await api.post("/suscripcion/cancelar-renovacion", {
         id_usuario: userId,
       });
-      alert("Renovación automática cancelada con éxito.");
-      // Vuelve a cargar para reflejar cambios
-      const res2 = await api.get(`/suscripciones/${userId}`);
-      setSuscripciones(res2.data);
+
+      Swal.fire({
+        icon: "success",
+        title: "Renovación cancelada",
+        text: "La renovación automática fue desactivada.",
+        confirmButtonColor: "#3b82f6",
+      });
+
+      // Volver a cargar datos
+      const resActiva = await api.get(`/suscripcion/${userId}/activa`);
+      setSuscripcionActiva(resActiva.data);
     } catch (err) {
       console.error("Error al cancelar renovación:", err);
-      alert("Ocurrió un error al cancelar la renovación.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo cancelar la renovación automática.",
+      });
     }
   };
 
@@ -58,52 +74,82 @@ const SuscripUsuario = () => {
       <Navbar />
       <div className="suscrip-usuario-wrapper">
         <h1>Mis Suscripciones</h1>
-        {loading ? (
-          <div className="suscrip-usuario-loading">
-            Cargando suscripciones...
-          </div>
-        ) : suscripciones.length === 0 ? (
-          <div className="suscrip-usuario-vacia">
-            No tienes suscripciones activas.
-          </div>
-        ) : (
-          <div className="suscrip-cards-container">
-            {suscripciones.map((sus, idx) => (
-              <div className="suscrip-card" key={sus.id_suscripcion || idx}>
-                <div className="suscrip-card-body">
-                  <h2>{sus.tipo_suscripcion?.nombre || "Sin nombre"}</h2>
-                  <p className="suscrip-card-desc">
-                    Suscripción{" "}
-                    {sus.estado_suscripcion?.nombre || "desconocida"}
-                  </p>
-                  <div className="suscrip-card-info">
-                    <span>
-                      <b>Precio:</b> ${sus.tipo_suscripcion?.precio || "?"}
-                    </span>
-                    <span>
-                      <b>Inicio:</b> {sus.fecha_inicio?.slice(0, 10)}
-                    </span>
-                    <span>
-                      <b>Fin:</b> {sus.fecha_fin?.slice(0, 10)}
-                    </span>
-                    <span>
-                      <b>Renovación:</b>{" "}
-                      {sus.renovacion_automatica ? "Sí" : "No"}
-                    </span>
-                  </div>
 
-                  {sus.renovacion_automatica && (
-                    <button
-                      className="btn-cancelar-renovacion"
-                      onClick={cancelarRenovacion}
-                    >
-                      Cancelar renovación automática
-                    </button>
-                  )}
-                </div>
+        {loading ? (
+          <div className="suscrip-usuario-loading">Cargando...</div>
+        ) : (
+          <>
+            <div className="suscrip-grid">
+              {/* Columna IZQUIERDA: Activa */}
+              <div className="suscrip-col">
+                <h2>Suscripción Activa</h2>
+                {suscripcionActiva ? (
+                  <div className="suscrip-card activa">
+                    <h2>{suscripcionActiva.tipo_suscripcion.nombre}</h2>
+                    <p className="suscrip-card-desc">
+                      Estado: {suscripcionActiva.estado_suscripcion.nombre}
+                    </p>
+                    <div className="suscrip-card-info">
+                      <span>
+                        <b>Precio:</b> $
+                        {suscripcionActiva.tipo_suscripcion.precio}
+                      </span>
+                      <span>
+                        <b>Inicio:</b>{" "}
+                        {suscripcionActiva.fecha_inicio?.slice(0, 10)}
+                      </span>
+                      <span>
+                        <b>Fin:</b> {suscripcionActiva.fecha_fin?.slice(0, 10)}
+                      </span>
+                      <span>
+                        <b>Renovación:</b>{" "}
+                        {suscripcionActiva.renovacion_automatica ? "Sí" : "No"}
+                      </span>
+                    </div>
+                    {suscripcionActiva.renovacion_automatica && (
+                      <button
+                        className="btn-cancelar-renovacion"
+                        onClick={cancelarRenovacion}
+                      >
+                        Cancelar renovación automática
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <p>No tienes una suscripción activa actualmente.</p>
+                )}
               </div>
-            ))}
-          </div>
+
+              {/* Columna DERECHA: Historial */}
+              <div className="suscrip-col">
+                <h2>Historial de Suscripciones</h2>
+                {historial.length === 0 ? (
+                  <p>No hay suscripciones anteriores.</p>
+                ) : (
+                  historial.map((sus, idx) => (
+                    <div className="suscrip-card historial" key={idx}>
+                      <h3>{sus.tipo_suscripcion.nombre}</h3>
+                      <p className="suscrip-card-desc">
+                        Estado: {sus.estado_suscripcion.nombre}
+                      </p>
+                      <div className="suscrip-card-info">
+                        <span>
+                          <b>Inicio:</b> {sus.fecha_inicio?.slice(0, 10)}
+                        </span>
+                        <span>
+                          <b>Fin:</b> {sus.fecha_fin?.slice(0, 10)}
+                        </span>
+                        <span>
+                          <b>Renovación:</b>{" "}
+                          {sus.renovacion_automatica ? "Sí" : "No"}
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </>
         )}
       </div>
     </>

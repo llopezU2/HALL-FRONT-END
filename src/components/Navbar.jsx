@@ -140,6 +140,17 @@ export default function Navbar({ onToggleSidebar }) {
                     <FaBars />
                   </button>
                 ))}
+              {/* HALL+ */}
+
+              <button
+                className="hallplus-premium-button"
+                onClick={() => navigate("/hall-plus")}
+              >
+                <i className="fas fa-crown"></i>
+                <span className="hallplus-text">
+                  HALL<span className="hallplus-plus">+</span>
+                </span>
+              </button>
 
               {isAuth && (
                 <div

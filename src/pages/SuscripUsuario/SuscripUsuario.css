@@ -1,52 +1,70 @@
 .suscrip-usuario-wrapper {
-  padding: 2.5rem 1rem 1rem 1rem;
+  padding: 6rem 1rem 2rem 1rem;
   min-height: 100vh;
   background: linear-gradient(to bottom, #0f172a, #1e293b);
   color: #f1f5f9;
 }
 
 .suscrip-usuario-wrapper h1 {
-    margin-top: 3.5rem;
   color: #38bdf8;
   font-size: 2.2rem;
   margin-bottom: 2rem;
   text-align: center;
 }
 
+.suscrip-usuario-wrapper section {
+  margin-bottom: 3rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.suscrip-usuario-wrapper h2 {
+  color: #38bdf8;
+  font-size: 1.5rem;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid #334155;
+  padding-bottom: 0.5rem;
+  text-align: left;
+}
+
+/* Contenedor de múltiples tarjetas */
 .suscrip-cards-container {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 1.5rem;
   justify-content: center;
 }
 
+/* Tarjeta individual */
 .suscrip-card {
   background: #1e293b;
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
   width: 320px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+  padding: 1.2rem;
   transition: transform 0.18s, box-shadow 0.18s;
 }
 
 .suscrip-card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 8px 32px rgba(56,189,248,0.13);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 8px 32px rgba(56, 189, 248, 0.13);
 }
 
-.suscrip-card-body {
-  padding: 1.2rem 1rem 1rem 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
+/* Colores especiales por tipo */
+.suscrip-card.activa {
+  border-left: 4px solid #22c55e;
 }
 
-.suscrip-card-body h2 {
+.suscrip-card.historial {
+  border-left: 4px solid #64748b;
+}
+
+.suscrip-card h2,
+.suscrip-card h3 {
   color: #38bdf8;
-  font-size: 1.3rem;
-  margin: 0;
+  font-size: 1.25rem;
+  margin: 0 0 0.5rem;
 }
 
 .suscrip-card-desc {
@@ -56,17 +74,51 @@
 }
 
 .suscrip-card-info {
-  font-size: 0.98rem;
+  font-size: 0.95rem;
   color: #f1f5f9;
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.25rem;
 }
 
+.btn-cancelar-renovacion {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  color: #f87171;
+  border: 1px solid #f87171;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-cancelar-renovacion:hover {
+  background-color: #f87171;
+  color: #1e293b;
+}
+
+/* Estados vacíos o cargando */
 .suscrip-usuario-loading,
 .suscrip-usuario-vacia {
   text-align: center;
   font-size: 1.2rem;
   color: #38bdf8;
   margin-top: 2rem;
+}
+
+.suscrip-grid {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 0 auto 3rem auto;
+}
+
+.suscrip-col {
+  flex: 1 1 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
