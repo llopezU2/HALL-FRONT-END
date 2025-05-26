@@ -3,6 +3,7 @@ import { FaBars } from "react-icons/fa";
 import "./key.css";
 import api from "../../api/axiosConfig";
 import Swal from "sweetalert2";
+import AdminSidebar from "../../components/AdminSidebar";
 
 const KeyManager = () => {
   // Estados para el formulario de agregar nueva key
@@ -283,33 +284,7 @@ const KeyManager = () => {
       <div className="key-content">
         {sidebarOpen && (
           <aside className="key-sidebar">
-            <div className="key-sidebar-logo">
-              <img
-                src="../src/img/LogoOficialGrande.png"
-                alt="Logo Oficial"
-                className="logo-img"
-              />
-            </div>
-            <h3>Panel Admin</h3>
-            <ul>
-              <li>
-                <a href="/admin/categorias">Ver Categorías</a>
-              </li>
-              <li>
-                <a href="/admin/suscripciones">Ver Suscripciones</a>
-              </li>
-              <li>
-                <a href="/admin/proveedores">Ver Proveedores</a>
-              </li>
-              <li>
-                <a className="nav-link active" href="/admin/key">
-                  Ver Keys
-                </a>
-              </li>
-              <li>
-                <a href="/admin">Volver al Panel</a>
-              </li>
-            </ul>
+            <AdminSidebar />
           </aside>
         )}
 

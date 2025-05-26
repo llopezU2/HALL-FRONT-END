@@ -3,6 +3,7 @@ import { FaBars } from "react-icons/fa";
 import api from "../../api/axiosConfig";
 import Swal from "sweetalert2";
 import "./Categoria.css";
+import AdminSidebar from "../../components/AdminSidebar";
 
 export default function Categoria() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -112,31 +113,7 @@ export default function Categoria() {
       <div className="categoria-content">
         {sidebarOpen && (
           <aside className="categoria-sidebar">
-            <div className="sidebar-logo">
-              <img
-                src="../src/img/LogoOficialGrande.png"
-                alt="Logo Oficial"
-                className="logo-img"
-              />            </div>
-            <h3>Sección Categorías</h3>
-            <ul>
-              <li>
-                <a class="nav-link active" href="/admin/categorias">Ver Categorías</a>
-              </li>
-              <li>
-                <a href="/admin/suscripciones">Ver Suscripciones</a>
-              </li>
-              <li>
-                <a href="/admin/proveedores">Ver Proveedores</a>
-              </li>
-              <li>
-                <a href="/admin/key">Ver Keys</a>
-              </li>
-              <li>
-                <a href="/admin">Volver al Panel</a>
-              </li>
-              
-            </ul>
+            <AdminSidebar />
           </aside>
         )}
 
@@ -200,8 +177,9 @@ export default function Categoria() {
 
           {showFabMenu && (
             <div
-              className={`categoria-fab-menu-container ${fabMenuOpen ? "fade-in" : "fade-out"
-                }`}
+              className={`categoria-fab-menu-container ${
+                fabMenuOpen ? "fade-in" : "fade-out"
+              }`}
             >
               <a href="/admin/suscripciones" className="categoria-fab-link">
                 Ver Suscripciones

@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import api from "../../api/axiosConfig";
 import "./JuegoAgg.css";
 import "../AdminPanel/AdminPanel.css";
+import AdminSidebar from "../../components/AdminSidebar";
 
 export default function JuegoAgg() {
   const [juegos, setJuegos] = useState([]);
@@ -84,78 +85,7 @@ export default function JuegoAgg() {
       <div className="admin-content">
         {sidebarOpen && (
           <aside className="admin-sidebar">
-            <div className="sidebar-logo">
-              <img
-                src="../src/img/LogoOficialGrande.png"
-                alt="Logo Oficial"
-                className="logo-img"
-              />
-            </div>
-            <h3>Panel Admin</h3>
-            <ul>
-              <li>
-                <a
-                  href="/admin/categorias"
-                  className={activePath === "/admin/categorias" ? "active" : ""}
-                >
-                  Ver Categorías
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/admin/suscripciones"
-                  className={
-                    activePath === "/admin/suscripciones" ? "active" : ""
-                  }
-                >
-                  Ver Suscripciones
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/admin/proveedores"
-                  className={
-                    activePath === "/admin/proveedores" ? "active" : ""
-                  }
-                >
-                  Ver Proveedores
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/admin/key"
-                  className={activePath === "/admin/key" ? "active" : ""}
-                >
-                  Ver Keys
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/admin/juegos"
-                  className={activePath === "/admin/juegos" ? "active" : ""}
-                >
-                  Ver Juegos
-                </a>
-              </li>
-              <li>
-                <a href="/admin">Volver al Panel</a>
-              </li>
-              <li>
-                <a
-                  href="/profile"
-                  className={activePath === "/profile" ? "active" : ""}
-                >
-                  <FaUser style={{ marginRight: 8 }} />
-                  Perfil
-                </a>
-              </li>
-              <li>
-                <button onClick={handleLogout} className="sidebar-logout">
-                  <FaSignOutAlt style={{ marginRight: 8 }} />
-                  Cerrar sesión
-                </button>
-              </li>
-            </ul>
+            <AdminSidebar />
           </aside>
         )}
 

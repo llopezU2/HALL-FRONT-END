@@ -17,6 +17,7 @@ import CompraUsuario from "./pages/CompraUsuario/CompraUsuario";
 import Pago from "./pages/Pago/Pago";
 import JuegoAgg from "./pages/JuegoAgg/JuegoAgg";
 import HallPlus from "./pages/HallPlus/HallPlus";
+import AdminSuscripciones from "./pages/SuscripAdmin/AdminSuscripciones";
 
 function App() {
   return (
@@ -30,7 +31,6 @@ function App() {
         <Route path="/plataforma/:id_plataforma" element={<Plataforma />} />
         <Route path="/juego/:id" element={<Juego />} />
         <Route path="/hall-plus" element={<HallPlus />} />
-
         {/* Rutas protegidas */}
         <Route
           path="/solicitudes"
@@ -64,7 +64,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/compra/:id"
           element={
@@ -73,7 +72,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/pago/:id"
           element={
@@ -82,7 +80,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         {/* Rutas admin */}
         <Route
           path="/admin"
@@ -92,7 +89,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/admin/categorias"
           element={
@@ -101,7 +97,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/admin/key"
           element={
@@ -110,7 +105,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/admin/key"
           element={
@@ -135,7 +129,8 @@ function App() {
             </ProtectedRoute>
           }
         />
-
+        .
+        <Route path="/admin/suscripciones" element={<AdminSuscripciones />} />
         {/* Ruta por defecto: Home */}
         <Route path="*" element={<Home />} />
       </Routes>

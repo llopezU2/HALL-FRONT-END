@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./proveedores.css";
 import api from "../../api/axiosConfig";
 import ErrorPopup from "../../components/ErrorPopup";
+import AdminSidebar from "../../components/AdminSidebar";
 
 const Proveedores = () => {
   const [proveedores, setProveedores] = useState([]);
@@ -31,8 +32,7 @@ const Proveedores = () => {
     }
   };
 
-  const validateEmail = (email) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const validateField = (name, value) => {
     if (!value) return "Este campo es obligatorio.";
@@ -83,33 +83,7 @@ const Proveedores = () => {
       <div className="key-wrapper">
         <div className="key-content">
           <aside className="key-sidebar">
-            <div className="key-sidebar-logo">
-              <img
-                src="../src/img/LogoOficialGrande.png"
-                alt="Logo Oficial"
-                className="logo-img"
-              />
-            </div>
-            <h3>Panel Admin</h3>
-            <ul>
-              <li>
-                <a href="/admin/categorias">Ver Categorías</a>
-              </li>
-              <li>
-                <a href="/admin/suscripciones">Ver Suscripciones</a>
-              </li>
-              <li>
-                <a className="nav-link active" href="/admin/proveedores">
-                  Ver Proveedores
-                </a>
-              </li>
-              <li>
-                <a href="/admin/key">Ver Keys</a>
-              </li>
-              <li>
-                <a href="/admin">Volver al Panel</a>
-              </li>
-            </ul>
+            <AdminSidebar />
           </aside>
           <main className="key-panel">
             <h1>Gestión de Proveedores</h1>

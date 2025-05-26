@@ -70,7 +70,11 @@
   max-height: 80px;
   object-fit: contain;
 }
-
+h1 {
+  color: #38bdf8;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
 
 /* CONTENIDO DEL PANEL */
 .admin-panel {
@@ -88,12 +92,6 @@
 
 .admin-panel.no-sidebar {
   margin-left: 0;
-}
-
-h1 {
-  color: #38bdf8;
-  font-size: 2.5rem;
-  margin-bottom: 2rem;
 }
 
 /* FORMULARIOS */
@@ -194,7 +192,6 @@ button[type="submit"]:hover {
   }
 }
 
-
 .floating-button-container {
   position: fixed;
   top: 50%;
@@ -215,7 +212,6 @@ button[type="submit"]:hover {
   width: 180px;
   animation: fadeInSlide 0.3s ease-out;
 }
-
 
 @keyframes fadeInSlide {
   from {
