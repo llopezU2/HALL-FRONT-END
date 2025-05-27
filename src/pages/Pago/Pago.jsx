@@ -27,7 +27,7 @@ const CARD_TYPES = [
     name: "amex",
     regex: /^3[47][0-9]{0,13}$/,
     icon: amexIcon,
-    cvv: 4,
+    cvv: 3,
     format: "#### ###### #####",
     label: "Amex",
   },
@@ -115,7 +115,10 @@ export default function Pago() {
     const { name, value } = e.target;
     if (name === "nombre") {
       // Solo letras y espacios
-      setCard({ ...card, nombre: value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g, "") });
+      setCard({
+        ...card,
+        nombre: value.replace(/[^A-Za-zÁÉÍÓÚáéíóúÑñ ]/g, ""),
+      });
     } else if (name === "numero") {
       // Solo números, máximo 16 (o 15 para Amex)
       let clean = value.replace(/\D/g, "");
@@ -205,7 +208,19 @@ export default function Pago() {
             ))}
           </div>
           <div className="tarjeta-form-row">
-            <div className="tarjeta-preview">
+            <div
+              className="tarjeta-preview"
+              style={{
+                background:
+                  cardType?.name === "visa"
+                    ? "linear-gradient(135deg, #2563eb, #1d4ed8)" // Azul Visa
+                    : cardType?.name === "mastercard"
+                    ? "linear-gradient(135deg, #f97316, #ea580c)" // Naranja Mastercard
+                    : cardType?.name === "amex"
+                    ? "linear-gradient(135deg, #0ea5e9, #38bdf8)" // Celeste Amex
+                    : "linear-gradient(135deg, #38bdf8 60%, #0ea5e9 100%)", // Default
+              }}
+            >
               <div className="tarjeta-chip"></div>
               <div className="tarjeta-numero">
                 {formatCardNumber(card.numero) || "•••• •••• •••• ••••"}

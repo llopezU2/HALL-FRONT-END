@@ -8,6 +8,17 @@ export default function AdminSuscripciones() {
   const [semana, setSemana] = useState(1);
   const [mensaje, setMensaje] = useState("");
 
+  const [historial, setHistorial] = useState({});
+
+  const obtenerHistorial = async () => {
+    const res = await api.get("/suscripcion/historial-juegos");
+    setHistorial(res.data);
+  };
+
+  useEffect(() => {
+    obtenerHistorial();
+  }, []);
+
   const obtenerSemanaActual = async () => {
     const res = await api.get("/configuracion");
     setSemana(res.data.semana_global);
@@ -19,7 +30,7 @@ export default function AdminSuscripciones() {
 
   const obtenerTipos = async () => {
     try {
-      const res = await api.get("/suscripcion/tipos");
+      const res = await api.get(`/suscripcion/tipos?semana=${semana}`);
       setTipos(res.data);
     } catch (error) {
       console.error("Error al cargar tipos:", error);
@@ -95,6 +106,32 @@ export default function AdminSuscripciones() {
                 ) : (
                   <p>No se ha asignado un juego para esta semana.</p>
                 )}
+              </div>
+            ))}
+          </div>
+          <div className="tipos-container historial">
+            {Object.entries(historial).map(([semana, juegos]) => (
+              <div key={semana} className="semana-bloque">
+                <h3>Semana {semana}</h3>
+                <div className="semana-row">
+                  {juegos.map((juego, idx) => (
+                    <div key={idx} className="tipo-card">
+                      <h4>{juego.plan}</h4>
+                      {juego.portada ? (
+                        <img
+                          src={juego.portada}
+                          alt="Portada"
+                          className="portada"
+                        />
+                      ) : (
+                        <div className="portada placeholder">Sin portada</div>
+                      )}
+                      <p>
+                        <strong>{juego.juego}</strong>
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>

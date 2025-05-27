@@ -58,6 +58,7 @@ export default function HallPlus() {
   });
   const [error, setError] = useState("");
   const [procesando, setProcesando] = useState(false);
+  const [selectedPlatforms, setSelectedPlatforms] = useState({});
   const cardType = detectCardType(card.numero);
 
   useEffect(() => {
@@ -157,6 +158,26 @@ export default function HallPlus() {
     }
   };
 
+  const getJuegosDelPlan = () => {
+    if (!selectedPlan) return [];
+    // Orden de jerarquía: Deluxe > Premium > Plus
+    const jerarquia = ["Deluxe", "Premium", "Plus"];
+    const idx = jerarquia.findIndex((j) =>
+      selectedPlan.nombre?.toLowerCase().includes(j.toLowerCase())
+    );
+    if (idx === -1) return [selectedPlan.juegoActual].filter(Boolean);
+
+    // Incluye juegos de todos los planes de igual o menor jerarquía
+    return planes
+      .filter((p) => {
+        const planIdx = jerarquia.findIndex((j) =>
+          p.nombre?.toLowerCase().includes(j.toLowerCase())
+        );
+        return planIdx >= idx && p.juegoActual;
+      })
+      .map((p) => p.juegoActual);
+  };
+
   return (
     <>
       <Navbar />
@@ -228,25 +249,41 @@ export default function HallPlus() {
           </div>
 
           <div className="pago-content">
-            <div className="tarjeta-preview">
-              <div className="tarjeta-dibujo">
-                <div className="chip" />
-                <div className="numero">•••• •••• •••• ••••</div>
-                <div className="info">
-                  <div>
-                    <label>NOMBRE</label>
-                    <div className="texto-nombre">
-                      {card.nombre || "NOMBRE Y APELLIDO"}
-                    </div>
-                  </div>
-                  <div>
-                    <label>VENCE</label>
-                    <div>{card.vencimiento || "MM/AA"}</div>
-                  </div>
-                  <div>
-                    <label>CVV</label>
-                    <div>{card.cvv ? "•••" : "•••"}</div>
-                  </div>
+            <div
+              className="tarjeta-preview"
+              style={{
+                background:
+                  cardType?.name === "visa"
+                    ? "linear-gradient(135deg, #2563eb, #1d4ed8)" // Azul Visa
+                    : cardType?.name === "mastercard"
+                    ? "linear-gradient(135deg, #f97316, #ea580c)" // Naranja Mastercard
+                    : cardType?.name === "amex"
+                    ? "linear-gradient(135deg, #0ea5e9, #38bdf8)" // Celeste Amex
+                    : "linear-gradient(135deg, #38bdf8 60%, #0ea5e9 100%)", // Default
+              }}
+            >
+              <div className="tarjeta-chip"></div>
+              <div className="tarjeta-numero">
+                {formatCardNumber(card.numero) || "•••• •••• •••• ••••"}
+              </div>
+              <div className="tarjeta-info-row">
+                <div>
+                  <span className="tarjeta-label">Nombre</span>
+                  <span className="tarjeta-nombre">
+                    {card.nombre || "NOMBRE Y APELLIDO"}
+                  </span>
+                </div>
+                <div>
+                  <span className="tarjeta-label">Vence</span>
+                  <span className="tarjeta-vencimiento">
+                    {card.vencimiento || "MM/AA"}
+                  </span>
+                </div>
+                <div>
+                  <span className="tarjeta-label">CVV</span>
+                  <span className="tarjeta-cvv">
+                    {card.cvv ? "•••" : "•••"}
+                  </span>
                 </div>
               </div>
             </div>

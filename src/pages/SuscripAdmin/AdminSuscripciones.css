@@ -110,3 +110,68 @@ h2 {
   object-fit: cover;
   height: 140px;
 }
+/* Estilo general para la sección del historial */
+.historial {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #1e293b;
+  border-radius: 12px;
+}
+
+.semana-bloque {
+  margin-bottom: 2.5rem;
+  padding: 1rem;
+  background-color: #0f172a;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.semana-bloque h3 {
+  color: #38bdf8;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #475569;
+  padding-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.semana-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: flex-start;
+}
+
+.tipo-card {
+  background: #1e293b;
+  padding: 1rem;
+  border-radius: 10px;
+  width: 180px;
+  text-align: center;
+  color: #f1f5f9;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+}
+
+.tipo-card:hover {
+  transform: scale(1.03);
+}
+
+.tipo-card h4 {
+  color: #60a5fa;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.tipo-card img.portada {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  max-height: 150px;
+  object-fit: cover;
+}
+
+.tipo-card p {
+  font-weight: bold;
+  font-size: 0.95rem;
+}
