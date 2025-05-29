@@ -106,8 +106,21 @@
   border-radius: 0.5rem;
   color: white;
   min-width: 220px;
+  max-height: 250px; /* altura máxima visible */
+  overflow-y: auto; /* activa scroll si hay muchos elementos */
+  scrollbar-width: thin;
+  scrollbar-color: #60a5fa transparent;
 }
-
+.sidebar-box::-webkit-scrollbar {
+  width: 8px;
+}
+.sidebar-box::-webkit-scrollbar-thumb {
+  background-color: #60a5fa;
+  border-radius: 4px;
+}
+.sidebar-box::-webkit-scrollbar-track {
+  background: transparent;
+}
 .sidebar-title {
   font-size: 1.2rem;
   margin-bottom: 0.8rem;

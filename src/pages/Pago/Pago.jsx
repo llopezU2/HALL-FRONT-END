@@ -5,6 +5,7 @@ import { useState } from "react";
 import visaIcon from "../../assets/visa.svg";
 import mcIcon from "../../assets/mastercard.svg";
 import amexIcon from "../../assets/amex.svg";
+import Swal from "sweetalert2";
 
 const CARD_TYPES = [
   {
@@ -148,8 +149,17 @@ export default function Pago() {
     setProcesando(true);
     setTimeout(() => {
       setProcesando(false);
-      alert("¡Pago realizado con éxito!");
-      navigate("/biblioteca-usuario");
+      Swal.fire({
+        title: "¡Pago exitoso!",
+        text: "Tu compra se ha procesado correctamente.",
+        icon: "success",
+        confirmButtonText: "Ir a la biblioteca",
+        customClass: {
+          confirmButton: "sweet-boton",
+        },
+      }).then(() => {
+        navigate("/biblioteca-usuario");
+      });
     }, 1800);
   };
 

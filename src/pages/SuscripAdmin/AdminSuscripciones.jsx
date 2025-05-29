@@ -79,9 +79,6 @@ export default function AdminSuscripciones() {
             <button onClick={asignarJuegosSemana}>
               Asignar Juegos a Planes
             </button>
-            <button onClick={asignarJuegosUsuarios}>
-              Asignar Juegos a Usuarios
-            </button>
           </div>
 
           {mensaje && <p className="mensaje">{mensaje}</p>}

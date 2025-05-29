@@ -5,6 +5,7 @@ import GameCardList from "../../components/GameCardList";
 import api from "../../api/axiosConfig";
 import { motion, AnimatePresence } from "framer-motion";
 import "./Home.css";
+import Swal from "sweetalert2";
 
 export default function Home() {
   const [recomendados, setRecomendados] = useState([]);
@@ -38,16 +39,34 @@ export default function Home() {
   const handleAgregarAmigo = async (id_receptor) => {
     try {
       const usr = JSON.parse(localStorage.getItem("user"));
-      if (!usr?.id_usuario) return alert("Inicia sesión primero.");
+      if (!usr?.id_usuario) {
+        return Swal.fire({
+          icon: "warning",
+          title: "Inicia sesión",
+          text: "Debes iniciar sesión para enviar solicitudes.",
+        });
+      }
+
       await api.post("/solicitud", {
         id_solicitante: usr.id_usuario,
         id_receptor,
       });
-      alert("Solicitud enviada");
+
+      Swal.fire({
+        icon: "success",
+        title: "Solicitud enviada",
+        text: "Tu solicitud de amistad fue enviada exitosamente.",
+        confirmButtonText: "Entendido",
+      });
+
       setModalUsuario(null);
     } catch (err) {
       console.error("Error al enviar solicitud:", err);
-      alert("No se pudo enviar la solicitud.");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudo enviar la solicitud.",
+      });
     }
   };
 
