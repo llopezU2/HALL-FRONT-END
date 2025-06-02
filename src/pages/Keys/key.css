@@ -13,7 +13,6 @@
   color: rgb(106, 214, 209);
 }
 
-
 /* SIDEBAR */
 .key-sidebar {
   width: 220px;
@@ -135,7 +134,7 @@
   flex-direction: column;
   gap: 0.7rem;
   height: auto;
-  min-height: 340px;
+  min-height: 460px;
   position: relative;
 }
 
@@ -160,7 +159,7 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin-top: 1.2rem;
-  width: auto;           /* Hace que el botón tenga solo el ancho de su contenido */
+  width: auto; /* Hace que el botón tenga solo el ancho de su contenido */
 }
 
 .key-form-section button[type="submit"]:hover {
@@ -191,10 +190,11 @@
   background-color: rgba(30, 41, 59, 0.85);
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.key-list th, .key-list td {
+.key-list th,
+.key-list td {
   padding: 0.8rem;
   text-align: left;
   border-bottom: 1px solid #334155;
@@ -242,10 +242,8 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 1.2rem;
-  width: 100%;
+  margin-top: 10rem;
 }
-
 .key-add-btn:hover {
   background-color: #2563eb;
 }

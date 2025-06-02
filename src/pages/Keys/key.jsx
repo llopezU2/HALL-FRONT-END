@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { FaBars } from "react-icons/fa";
 import "./key.css";
 import api from "../../api/axiosConfig";
@@ -6,183 +6,188 @@ import Swal from "sweetalert2";
 import AdminSidebar from "../../components/AdminSidebar";
 
 const KeyManager = () => {
-  // Estados para el formulario de agregar nueva key
-  const [providers, setProviders] = useState([]); // Lista de proveedores
-  const [games, setGames] = useState([]); // Lista de juegos
-  const [platforms, setPlatforms] = useState([]); // Lista de plataformas
+  // Estados para el formulario
   const [form, setForm] = useState({
-    provider: "", // ID del proveedor seleccionado
-    game: "", // ID del juego seleccionado
-    platform: "", // ID de la plataforma seleccionada
-    quantity: "", // Cantidad de keys a agregar
-    buyPrice: "", // Precio de compra
-    sellPrice: "", // Precio de venta
+    provider: "",
+    game: "",
+    platform: "",
+    quantity: "",
+    buyPrice: "",
+    sellPrice: "",
   });
 
-  // Estados para la visualización y filtros de la tabla de keys
-  const [keys, setKeys] = useState([]); // Lista de keys mostradas en la tabla
+  // Estados para datos
+  const [providers, setProviders] = useState([]);
+  const [games, setGames] = useState([]);
+  const [platforms, setPlatforms] = useState([]);
+  const [keys, setKeys] = useState([]);
+  const [gameCounts, setGameCounts] = useState([]);
+
+  // Estados para UI
+  const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
+  const [fabMenuOpen, setFabMenuOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+
+  // Estados para filtros y paginación
   const [filters, setFilters] = useState({
-    platform: "", // Plataforma seleccionada para filtrar
-    game: "", // Juego seleccionado para filtrar
-    price: "", // Precio mínimo para filtrar
+    platform: "",
+    game: "",
+    price: "",
+    estado: "",
   });
 
-  // Estados para el manejo de la interfaz responsiva y sidebar
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Si es vista móvil
-  const [sidebarOpen, setSidebarOpen] = useState(!isMobile); // Estado del sidebar
-  const [fabMenuOpen, setFabMenuOpen] = useState(false); // Menú flotante móvil
-  const [isClosing, setIsClosing] = useState(false); // Animación de cierre del menú flotante
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pageSize: 20,
+    total: 0,
+  });
 
-  // Nuevos estados para el conteo de keys por juego
-  const [gameCounts, setGameCounts] = useState([]); // Conteo de keys por juego
-  const [selectedGameCount, setSelectedGameCount] = useState(null); // Conteo para el juego filtrado
+  // Carga inicial optimizada
+  const fetchInitialData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const [platformsRes, keysRes] = await Promise.all([
+        api.get("/plataforma"),
+        api.get(`/key/estado/1?skip=0&take=${pagination.pageSize}`),
+      ]);
 
-  // Efecto para manejar el cambio de tamaño de la ventana y actualizar la vista móvil/sidebar
+      setPlatforms(platformsRes.data);
+      setKeys(keysRes.data);
+
+      if (keysRes.headers["x-total-count"]) {
+        setPagination((prev) => ({
+          ...prev,
+          total: parseInt(keysRes.headers["x-total-count"]),
+        }));
+      }
+    } catch (error) {
+      console.error("Error loading initial data:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudieron cargar los datos iniciales",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [pagination.pageSize]);
+
+  // Carga diferida de juegos y proveedores
+  const loadGames = useCallback(async () => {
+    if (games.length > 0) return;
+    try {
+      const res = await api.get("/juego");
+      setGames(res.data);
+    } catch (error) {
+      console.error("Error loading games:", error);
+    }
+  }, [games.length]);
+
+  const loadProviders = useCallback(async () => {
+    if (providers.length > 0) return;
+    try {
+      const res = await api.get("/proveedores");
+      setProviders(res.data);
+    } catch (error) {
+      console.error("Error loading providers:", error);
+    }
+  }, [providers.length]);
+
+  // Carga de keys con filtros
+  const fetchKeys = useCallback(async () => {
+    try {
+      setLoading(true);
+      const estadoId = filters.estado === "vendida" ? 2 : null;
+
+      const skip = (pagination.page - 1) * pagination.pageSize;
+      const res = estadoId
+        ? await api.get(
+            `/key/estado/${estadoId}?skip=${skip}&take=${pagination.pageSize}`
+          )
+        : await api.get(`/key?skip=${skip}&take=${pagination.pageSize}`);
+
+      setKeys(res.data);
+
+      if (res.headers["x-total-count"]) {
+        setPagination((prev) => ({
+          ...prev,
+          total: parseInt(res.headers["x-total-count"]),
+        }));
+      }
+    } catch (error) {
+      console.error("Error loading keys:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [filters.estado, pagination.page, pagination.pageSize]);
+
+  // Efectos
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth <= 768;
       setIsMobile(mobile);
       setSidebarOpen(!mobile);
     };
+
     window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    fetchInitialData();
 
-  // Efecto para cargar proveedores, juegos y plataformas al iniciar el componente
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Carga los datos de juegos, plataformas y proveedores desde la API
-        const [gamesRes, platformsRes, providersRes] = await Promise.all([
-          api.get("/juego"),
-          api.get("/plataforma"),
-          api.get("/proveedores"),
-        ]);
-        // Mapea y guarda los proveedores
-        setProviders(
-          providersRes.data.map((p) => ({
-            ...p,
-            id: p.id_proveedor,
-            name: p.nombre,
-          }))
-        );
-        // Mapea y guarda los juegos
-        setGames(
-          gamesRes.data.map((j) => ({
-            ...j,
-            id: j.id_juego,
-            name: j.titulo,
-            platform: j.plataforma,
-          }))
-        );
-        // Guarda las plataformas
-        setPlatforms(platformsRes.data);
-        // Carga las keys existentes
-        fetchKeys();
-      } catch (error) {
-        alert("Error al cargar datos iniciales");
-        setGames([]);
-        setPlatforms([]);
-        setProviders([]);
-      }
+    return () => {
+      window.removeEventListener("resize", handleResize);
     };
-    fetchData();
-  }, []);
+  }, [fetchInitialData]);
 
-  // Efecto para cargar el conteo de keys por juego
   useEffect(() => {
     const fetchGameCounts = async () => {
       try {
         const res = await api.get("/key/counts/juego");
         setGameCounts(res.data);
       } catch (error) {
-        setGameCounts([]);
+        console.error("Error loading game counts:", error);
       }
     };
     fetchGameCounts();
   }, []);
 
-  // Función para cargar las keys desde la API y formatearlas para la tabla
-  const fetchKeys = async () => {
-    try {
-      const res = await api.get("/key");
-      setKeys(
-        res.data.map((k) => ({
-          id: k.id_key,
-          provider: k.proveedor?.nombre || "",
-          game: k.juego?.titulo || "",
-          platform: k.plataforma?.nombre || "",
-          price: k.precio_compra,
-          sellPrice: k.precio_venta,
-          quantity: 1,
-          key: k.key,
-        }))
-      );
-    } catch (error) {
-      alert("Error al cargar las keys");
-      setKeys([]);
-    }
-  };
+  useEffect(() => {
+    fetchKeys();
+  }, [fetchKeys]);
 
-  // Maneja los cambios en los campos del formulario de agregar key
+  // Handlers
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Valida que todos los campos del formulario sean válidos antes de enviar
-  const validateForm = () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     if (
       !form.provider ||
       !form.game ||
       !form.platform ||
-      isNaN(Number(form.platform)) ||
       !form.quantity ||
       !form.buyPrice ||
       !form.sellPrice
     ) {
-      alert("Todos los campos son obligatorios y válidos.");
-      return false;
-    }
-    if (
-      Number(form.quantity) < 1 ||
-      Number(form.buyPrice) < 0 ||
-      Number(form.sellPrice) < 0
-    ) {
-      alert("No se permiten valores negativos ni cantidades menores a 1.");
-      return false;
-    }
-    if (!form.platform || isNaN(Number(form.platform))) {
-      alert("Selecciona una plataforma válida.");
-      return false;
-    }
-    return true;
-  };
-
-  // Maneja el envío del formulario para agregar una nueva key
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!validateForm()) return;
-
-    const providerObj = providers.find((p) => p.id === Number(form.provider));
-    const gameObj = games.find((g) => g.id === Number(form.game));
-    if (!providerObj || !gameObj) {
-      alert("Proveedor o juego inválido.");
+      Swal.fire("Error", "Todos los campos son obligatorios", "error");
       return;
     }
 
     try {
       const payload = {
-        proveedorId: providerObj.id,
-        juegoId: gameObj.id,
+        proveedorId: Number(form.provider),
+        juegoId: Number(form.game),
         plataformaId: Number(form.platform),
         cantidad: Number(form.quantity),
         precioCompra: Number(form.buyPrice),
         precioVenta: Number(form.sellPrice),
         descripcion: "",
       };
-      console.log("Payload enviado a /transaccion/compra:", payload);
+
       await api.post("/transaccion/compra", payload);
+
       Swal.fire({
         icon: "success",
         title: "¡Key agregada!",
@@ -190,7 +195,7 @@ const KeyManager = () => {
         timer: 2000,
         showConfirmButton: false,
       });
-      fetchKeys();
+
       setForm({
         provider: "",
         game: "",
@@ -199,56 +204,23 @@ const KeyManager = () => {
         buyPrice: "",
         sellPrice: "",
       });
+
+      fetchKeys();
     } catch (error) {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Error al registrar la compra",
+        text: error.response?.data?.message || "Error al registrar la compra",
       });
     }
   };
 
-  // Filtra las keys según los filtros seleccionados (plataforma, juego, precio mínimo)
-  const filteredKeys = keys.filter((k) => {
-    const priceFilter = filters.price !== "" ? Number(filters.price) : null;
-    return (
-      (!filters.platform || k.platform === filters.platform) &&
-      (!filters.game || k.game === filters.game) &&
-      (priceFilter === null || k.sellPrice >= priceFilter)
-    );
-  });
-
-  // Llama al endpoint del backend para filtrar keys por precio mínimo
-  const handlePriceFilter = async () => {
-    if (filters.price === "" || isNaN(Number(filters.price))) {
-      fetchKeys();
-      return;
-    }
-    try {
-      const res = await api.post("/key/filtrar-precio", {
-        precio: Number(filters.price),
-      });
-      setKeys(
-        res.data.map((k) => ({
-          id: k.id_key,
-          provider: k.proveedor?.nombre || "",
-          game: k.juego?.titulo || "",
-          platform: k.plataforma?.nombre || "",
-          price: k.precio_compra,
-          sellPrice: k.precio_venta,
-          quantity: 1,
-          key: k.key,
-        }))
-      );
-    } catch (error) {
-      alert("Error al filtrar por precio");
-    }
+  const handlePageChange = (newPage) => {
+    setPagination((prev) => ({ ...prev, page: newPage }));
   };
 
-  // Alterna la visibilidad del sidebar en escritorio
+  // UI Helpers
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
-
-  // Alterna el menú flotante en móvil (con animación)
   const toggleFabMenu = () => {
     if (fabMenuOpen) {
       setIsClosing(true);
@@ -261,24 +233,27 @@ const KeyManager = () => {
     }
   };
 
-  // Efecto para actualizar el conteo de keys del juego seleccionado
-  useEffect(() => {
-    if (!filters.game) {
-      setSelectedGameCount(null);
-      return;
-    }
-    // Encuentra el ID del juego seleccionado a partir del nombre
-    const selectedGameObj = games.find((g) => g.name === filters.game);
-    const selectedGameId = selectedGameObj ? selectedGameObj.id : null;
+  // Datos calculados
+  const selectedGameCount = useMemo(() => {
+    if (!filters.game) return null;
+    const game = games.find((g) => g.titulo === filters.game);
+    if (!game) return null;
+    return gameCounts.find((g) => g.id_juego === game.id_juego)?.cantidad || 0;
+  }, [filters.game, games, gameCounts]);
 
-    // Busca el conteo usando el ID
-    const found = gameCounts.find(
-      (g) => String(g.id_juego) === String(selectedGameId)
-    );
-    const selectedGameCount = found ? found.cantidad : 0;
-    setSelectedGameCount(selectedGameCount);
-  }, [filters.game, gameCounts]);
+  const filteredKeys = useMemo(() => {
+    return keys.filter((key) => {
+      const matchesPlatform =
+        !filters.platform || key.plataforma?.nombre === filters.platform;
+      const matchesGame = !filters.game || key.juego?.titulo === filters.game;
+      const matchesPrice =
+        !filters.price || key.precio_venta >= Number(filters.price);
 
+      return matchesPlatform && matchesGame && matchesPrice;
+    });
+  }, [keys, filters]);
+
+  // Render
   return (
     <div className="key-wrapper">
       <div className="key-content">
@@ -290,8 +265,8 @@ const KeyManager = () => {
 
         <main className={`key-panel ${!sidebarOpen ? "no-sidebar" : ""}`}>
           <h1>Gestión de Keys</h1>
+
           <div className="key-form-filters-row">
-            {/* Sección para agregar una nueva key */}
             <div className="key-form-section">
               <h2>Agregar nueva Key</h2>
               <form onSubmit={handleSubmit}>
@@ -299,28 +274,32 @@ const KeyManager = () => {
                   name="provider"
                   value={form.provider}
                   onChange={handleChange}
+                  onFocus={loadProviders}
                   required
                 >
                   <option value="">Proveedor</option>
                   {providers.map((prov) => (
-                    <option key={prov.id} value={prov.id}>
+                    <option key={prov.id_proveedor} value={prov.id_proveedor}>
                       {prov.nombre}
                     </option>
                   ))}
                 </select>
+
                 <select
                   name="game"
                   value={form.game}
                   onChange={handleChange}
+                  onFocus={loadGames}
                   required
                 >
                   <option value="">Juego</option>
-                  {games.map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.name}
+                  {games.map((game) => (
+                    <option key={game.id_juego} value={game.id_juego}>
+                      {game.titulo}
                     </option>
                   ))}
                 </select>
+
                 <select
                   name="platform"
                   value={form.platform}
@@ -328,12 +307,13 @@ const KeyManager = () => {
                   required
                 >
                   <option value="">Plataforma</option>
-                  {platforms.map((p) => (
-                    <option key={p.id_plataforma} value={p.id_plataforma}>
-                      {p.nombre}
+                  {platforms.map((plat) => (
+                    <option key={plat.id_plataforma} value={plat.id_plataforma}>
+                      {plat.nombre}
                     </option>
                   ))}
                 </select>
+
                 <input
                   type="number"
                   name="quantity"
@@ -343,6 +323,7 @@ const KeyManager = () => {
                   min={1}
                   required
                 />
+
                 <input
                   type="number"
                   name="buyPrice"
@@ -353,6 +334,7 @@ const KeyManager = () => {
                   step="0.01"
                   required
                 />
+
                 <input
                   type="number"
                   name="sellPrice"
@@ -363,12 +345,13 @@ const KeyManager = () => {
                   step="0.01"
                   required
                 />
+
                 <button type="submit" className="key-add-btn">
                   Agregar Key
                 </button>
               </form>
             </div>
-            {/* Sección de filtros para la tabla de keys */}
+
             <div className="key-filters key-filters-side">
               <select
                 value={filters.platform}
@@ -377,25 +360,38 @@ const KeyManager = () => {
                 }
               >
                 <option value="">Plataforma</option>
-                {platforms.map((p) => (
-                  <option key={p.id} value={p.nombre}>
-                    {p.nombre}
+                {platforms.map((plat) => (
+                  <option key={plat.id_plataforma} value={plat.nombre}>
+                    {plat.nombre}
                   </option>
                 ))}
               </select>
+
               <select
                 value={filters.game}
                 onChange={(e) =>
                   setFilters({ ...filters, game: e.target.value })
                 }
+                onFocus={loadGames}
               >
                 <option value="">Juego</option>
-                {games.map((g) => (
-                  <option key={g.id} value={g.name}>
-                    {g.name}
+                {games.map((game) => (
+                  <option key={game.id_juego} value={game.titulo}>
+                    {game.titulo}
                   </option>
                 ))}
               </select>
+
+              <select
+                value={filters.estado}
+                onChange={(e) =>
+                  setFilters({ ...filters, estado: e.target.value })
+                }
+              >
+                <option value="vendida">Vendidas</option>
+                <option value="">Todas</option>
+              </select>
+
               <input
                 type="number"
                 placeholder="Precio mínimo"
@@ -403,49 +399,90 @@ const KeyManager = () => {
                 onChange={(e) =>
                   setFilters({ ...filters, price: e.target.value })
                 }
-                onBlur={handlePriceFilter}
                 min={0}
               />
             </div>
           </div>
-          {/* Mensaje de conteo de keys para el juego seleccionado */}
-          {/* Solo se muestra si hay un juego seleccionado */}
-          {filters.game && (
-            <div
-              style={{ margin: "16px 0", fontWeight: "bold", color: "#00bfff" }}
-            >
-              Total de keys para el juego seleccionado: {selectedGameCount || 0}
-            </div>
-          )}
-          {/* Tabla de keys */}
-          <div className="key-list">
-            <table>
-              <thead>
-                <tr>
-                  <th>Proveedor</th>
-                  <th>Juego</th>
-                  <th>Plataforma</th>
-                  <th>Precio Compra</th>
-                  <th>Precio Venta</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredKeys.map((k) => (
-                  <tr key={k.id}>
-                    <td>{k.provider}</td>
-                    <td>{k.game}</td>
-                    <td>{k.platform}</td>
-                    <td>${k.price}</td>
-                    <td>${k.sellPrice}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="key-counts">
+            {filters.game && selectedGameCount !== null && (
+              <div className="key-count-info">
+                Total de keys para {filters.game}: {selectedGameCount}
+              </div>
+            )}
           </div>
+          {loading ? (
+            <div className="loading-spinner">
+              <p>Cargando keys...</p>
+            </div>
+          ) : (
+            <>
+              <div className="key-list">
+                <div className="table-wrapper">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Proveedor</th>
+                        <th>Juego</th>
+                        <th>Plataforma</th>
+                        <th>Precio Compra</th>
+                        <th>Precio Venta</th>
+                        <th>Estado</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredKeys.map((key) => (
+                        <tr key={key.id_key}>
+                          <td>{key.proveedor?.nombre || "-"}</td>
+                          <td>{key.juego?.titulo || "-"}</td>
+                          <td>{key.plataforma?.nombre || "-"}</td>
+                          <td>
+                            $
+                            {!isNaN(key.precio_compra)
+                              ? Number(key.precio_compra).toFixed(2)
+                              : "0.00"}
+                          </td>
+                          <td>
+                            $
+                            {!isNaN(key.precio_venta)
+                              ? Number(key.precio_venta).toFixed(2)
+                              : "0.00"}
+                          </td>
+
+                          <td>{key.estado_key?.nombre || "-"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div className="pagination-controls">
+                <button
+                  disabled={pagination.page === 1}
+                  onClick={() => handlePageChange(pagination.page - 1)}
+                >
+                  Anterior
+                </button>
+
+                <span>
+                  Página {pagination.page} de{" "}
+                  {Math.ceil(pagination.total / pagination.pageSize)}
+                </span>
+
+                <button
+                  disabled={
+                    pagination.page * pagination.pageSize >= pagination.total
+                  }
+                  onClick={() => handlePageChange(pagination.page + 1)}
+                >
+                  Siguiente
+                </button>
+              </div>
+            </>
+          )}
         </main>
       </div>
 
-      {/* Botón flotante y menú para navegación rápida en móvil */}
       {isMobile && (
         <div className="key-floating-button-container">
           {(fabMenuOpen || isClosing) && (
@@ -458,7 +495,7 @@ const KeyManager = () => {
               <a href="/admin/suscripciones" className="key-fab-link">
                 Ver Suscripciones
               </a>
-              <a href="/admin/suscripciones" className="key-fab-link">
+              <a href="/admin/proveedores" className="key-fab-link">
                 Ver Proveedores
               </a>
               <a href="/admin/key" className="key-fab-link">
