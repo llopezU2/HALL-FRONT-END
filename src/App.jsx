@@ -19,6 +19,8 @@ import JuegoAgg from "./pages/JuegoAgg/JuegoAgg";
 import HallPlus from "./pages/HallPlus/HallPlus";
 import AdminSuscripciones from "./pages/SuscripAdmin/AdminSuscripciones";
 import BibliotecaAmigo from "./pages/BibliotecaAmigo/BibliotecaAmigo";
+import WidgetFlotante from "./pages/WidgetFlotante/WidgetFlotante";
+import EventoForm from "./pages/Eventos/EventoForm";
 
 function App() {
   return (
@@ -135,10 +137,26 @@ function App() {
           }
         />
         .
-        <Route path="/admin/suscripciones" element={<AdminSuscripciones />} />
+        <Route
+          path="/admin/suscripciones"
+          element={
+            <ProtectedRoute>
+              <AdminSuscripciones />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/eventos"
+          element={
+            <ProtectedRoute>
+              <EventoForm />
+            </ProtectedRoute>
+          }
+        />
         {/* Ruta por defecto: Home */}
         <Route path="*" element={<Home />} />
       </Routes>
+      <WidgetFlotante />
     </Router>
   );
 }

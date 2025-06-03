@@ -11,23 +11,21 @@ export default function Navbar({ onToggleSidebar }) {
   const location = useLocation();
   const isAuth = auth.isAuthenticated();
 
-  // 1) Obtén el usuario de localStorage
   const storedUser = localStorage.getItem("user");
   const user = storedUser ? JSON.parse(storedUser) : null;
   const userId = user?.id_usuario;
-
-  // 2) Detecta si es admin
   const isAdmin = user?.rol?.id_rol === 1;
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [searchTerm, setSearchTerm] = useState("");
-  const searchRef = useRef(null);
+  const [searchResults, setSearchResults] = useState([]);
   const [pendingSolicitudes, setPendingSolicitudes] = useState(0);
   const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
 
-  // Fetch solicitudes pendientes (solo para no-admin)
+  const searchRef = useRef(null);
+
   useEffect(() => {
     if (!isAdmin && userId) {
       api
@@ -37,14 +35,12 @@ export default function Navbar({ onToggleSidebar }) {
     }
   }, [location.pathname]);
 
-  // Resize handler
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth <= 768);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  // Click fuera de buscador
   useEffect(() => {
     const handleOutside = (e) => {
       if (
@@ -55,11 +51,28 @@ export default function Navbar({ onToggleSidebar }) {
       ) {
         setIsSearchOpen(false);
         setSearchTerm("");
+        setSearchResults([]);
       }
     };
     document.addEventListener("mousedown", handleOutside);
     return () => document.removeEventListener("mousedown", handleOutside);
   }, [isSearchOpen, isMobile]);
+
+  // 🔍 Buscar juegos en tiempo real
+  useEffect(() => {
+    const delay = setTimeout(() => {
+      if (searchTerm.trim() !== "") {
+        api
+          .get(`/juego/buscar?query=${searchTerm}`)
+          .then((res) => setSearchResults(res.data))
+          .catch(() => setSearchResults([]));
+      } else {
+        setSearchResults([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(delay);
+  }, [searchTerm]);
 
   const handleLogout = () => {
     auth.logout();
@@ -68,15 +81,14 @@ export default function Navbar({ onToggleSidebar }) {
   const toggleSearch = () => {
     setIsSearchOpen((open) => !open);
     setSearchTerm("");
+    setSearchResults([]);
   };
-  const toggleMenu = () => {
-    setIsMenuOpen((open) => !open);
-  };
+  const toggleMenu = () => setIsMenuOpen((open) => !open);
 
   return (
     <div className="navbar-wrapper">
       <nav className="navbar">
-        {/* LOGO siempre visible */}
+        {/* Logo */}
         <div className="navbar-left">
           <img src={logo} alt="Logo HALLGRANDE" className="navbar-img" />
           <Link to={isAdmin ? "/admin" : "/home"} className="navbar-name">
@@ -84,10 +96,10 @@ export default function Navbar({ onToggleSidebar }) {
           </Link>
         </div>
 
-        {/* Todo lo demás SOLO si NO es admin */}
+        {/* No admin */}
         {!isAdmin && (
           <>
-            {/* Centros de links y buscador (desktop) */}
+            {/* Desktop: plataformas y buscador */}
             {!isMobile && (
               <div className="navbar-center">
                 <div className="platforms">
@@ -121,11 +133,40 @@ export default function Navbar({ onToggleSidebar }) {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
+                  {isSearchOpen && searchResults.length > 0 && (
+                    <ul className="search-suggestions">
+                      {searchResults.map((j) => (
+                        <li
+                          key={j.id_juego}
+                          className="suggestion-card"
+                          onClick={() => {
+                            navigate(`/juego/${j.id_juego}`);
+                            setSearchTerm("");
+                            setSearchResults([]);
+                            setIsSearchOpen(false);
+                          }}
+                        >
+                          <img
+                            src={
+                              j.portada ||
+                              "https://via.placeholder.com/80x80?text=No+Img"
+                            }
+                            alt={j.titulo}
+                            className="suggestion-card-img"
+                          />
+                          <div className="suggestion-card-info">
+                            <p className="suggestion-card-title">{j.titulo}</p>
+                            <div className="suggestion-card-meta"></div>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             )}
 
-            {/* Lado derecho */}
+            {/* Right panel */}
             <div className="navbar-right">
               {isMobile &&
                 (onToggleSidebar ? (
@@ -140,7 +181,6 @@ export default function Navbar({ onToggleSidebar }) {
                     <FaBars />
                   </button>
                 ))}
-              {/* HALL+ */}
 
               <button
                 className="hallplus-premium-button"
@@ -153,64 +193,64 @@ export default function Navbar({ onToggleSidebar }) {
               </button>
 
               {isAuth && (
-                <div
-                  className="navbar-user-dropdown"
-                  tabIndex={0}
-                  onBlur={() =>
-                    setTimeout(() => setIsUserDropdownOpen(false), 150)
-                  }
-                >
-                  <button
-                    className="navbar-link navbar-profile-btn"
-                    onClick={() => setIsUserDropdownOpen((open) => !open)}
+                <>
+                  <div
+                    className="navbar-user-dropdown"
+                    tabIndex={0}
+                    onBlur={() =>
+                      setTimeout(() => setIsUserDropdownOpen(false), 150)
+                    }
                   >
-                    <img
-                      src={
-                        user?.foto ||
-                        `https://ui-avatars.com/api/?name=${user?.nombre}&background=3b82f6&color=fff`
-                      }
-                      alt="Perfil"
-                      className="navbar-profile-img"
-                    />
-                    <i className="fas fa-caret-down navbar-caret"></i>
-                  </button>
-                  {isUserDropdownOpen && (
-                    <div className="navbar-dropdown-menu">
-                      <Link
-                        to="/profile"
-                        onClick={() => setIsUserDropdownOpen(false)}
-                      >
-                        Mi perfil
-                      </Link>
-                      <Link
-                        to="/biblioteca-usuario"
-                        onClick={() => setIsUserDropdownOpen(false)}
-                      >
-                        Ver mi biblioteca
-                      </Link>
-                      <Link
-                        to="/suscrip-usuario"
-                        onClick={() => setIsUserDropdownOpen(false)}
-                      >
-                        Suscripciones
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              )}
+                    <button
+                      className="navbar-link navbar-profile-btn"
+                      onClick={() => setIsUserDropdownOpen((open) => !open)}
+                    >
+                      <img
+                        src={
+                          user?.foto ||
+                          `https://ui-avatars.com/api/?name=${user?.nombre}&background=3b82f6&color=fff`
+                        }
+                        alt="Perfil"
+                        className="navbar-profile-img"
+                      />
+                      <i className="fas fa-caret-down navbar-caret"></i>
+                    </button>
+                    {isUserDropdownOpen && (
+                      <div className="navbar-dropdown-menu">
+                        <Link
+                          to="/profile"
+                          onClick={() => setIsUserDropdownOpen(false)}
+                        >
+                          Mi perfil
+                        </Link>
+                        <Link
+                          to="/biblioteca-usuario"
+                          onClick={() => setIsUserDropdownOpen(false)}
+                        >
+                          Ver mi biblioteca
+                        </Link>
+                        <Link
+                          to="/suscrip-usuario"
+                          onClick={() => setIsUserDropdownOpen(false)}
+                        >
+                          Suscripciones
+                        </Link>
+                      </div>
+                    )}
+                  </div>
 
-              {isAuth && (
-                <Link
-                  to="/solicitudes"
-                  className="navbar-link solicitudes-icon-wrapper"
-                >
-                  <i className="fas fa-user-friends"></i>
-                  {pendingSolicitudes > 0 && (
-                    <span className="solicitudes-badge">
-                      {pendingSolicitudes}
-                    </span>
-                  )}
-                </Link>
+                  <Link
+                    to="/solicitudes"
+                    className="navbar-link solicitudes-icon-wrapper"
+                  >
+                    <i className="fas fa-user-friends"></i>
+                    {pendingSolicitudes > 0 && (
+                      <span className="solicitudes-badge">
+                        {pendingSolicitudes}
+                      </span>
+                    )}
+                  </Link>
+                </>
               )}
 
               {!isMobile && isAuth && (
@@ -219,7 +259,6 @@ export default function Navbar({ onToggleSidebar }) {
                 </button>
               )}
 
-              {/* Botón de inicio de sesión (solo si no está autenticado) */}
               {!isAuth && (
                 <button
                   className="navbar-button-login"
@@ -233,7 +272,7 @@ export default function Navbar({ onToggleSidebar }) {
         )}
       </nav>
 
-      {/* buscador móvil */}
+      {/* Buscador móvil */}
       {!isAdmin && isSearchOpen && isMobile && (
         <div className="search-modal" onClick={() => setIsSearchOpen(false)}>
           <div
@@ -258,7 +297,7 @@ export default function Navbar({ onToggleSidebar }) {
         </div>
       )}
 
-      {/* menú hamburguesa móvil */}
+      {/* Menú hamburguesa móvil */}
       {!isAdmin && isMobile && isMenuOpen && (
         <div className="mobile-menu">
           <ul className="mobile-menu-list">

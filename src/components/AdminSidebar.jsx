@@ -32,6 +32,10 @@ export default function AdminSidebar({ onClose }) {
           <a href="/admin/suscripciones">Ver Suscripciones</a>
         </li>
         <li>
+          <a href="/admin/eventos">Crear Evento</a>
+        </li>
+
+        <li>
           <a href="/admin/proveedores">Ver Proveedores</a>
         </li>
         <li>

@@ -558,3 +558,79 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
 }
+
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 380px;
+  background: #0f172a;
+  border-radius: 10px;
+  z-index: 20;
+  padding: 0.5rem 0;
+  max-height: 400px;
+  overflow-y: auto;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.suggestion-card {
+  display: flex;
+  padding: 0.7rem 1rem;
+  gap: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  border-bottom: 1px solid #1e293b;
+}
+
+.suggestion-card:hover {
+  background-color: #1e293b;
+}
+
+.suggestion-card-img {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid #3b82f6;
+}
+
+.suggestion-card-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}
+
+.suggestion-card-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggestion-card-meta {
+  margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.suggestion-card-price {
+  background-color: #16a34a;
+  color: white;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.suggestion-card-descuento {
+  background-color: #dc2626;
+  color: white;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
