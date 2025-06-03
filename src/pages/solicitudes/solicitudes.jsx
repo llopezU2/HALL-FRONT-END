@@ -2,6 +2,7 @@ import Layout from "../../components/Layout";
 import { useEffect, useState } from "react";
 import api from "../../api/axiosConfig";
 import "../solicitudes/solicitudes.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Solicitudes() {
   const storedUser = localStorage.getItem("user");
@@ -12,6 +13,7 @@ export default function Solicitudes() {
   const [amistades, setAmistades] = useState([]);
   const [modalUsuario, setModalUsuario] = useState(null); // Para el modal de amistad
   const [confirmDelete, setConfirmDelete] = useState(null); // Para el mini-modal de confirmación de eliminar
+  const navigate = useNavigate();
 
   // Fetch solicitudes y amistades
   useEffect(() => {
@@ -136,7 +138,27 @@ export default function Solicitudes() {
             <h2>{modalUsuario.nombre}</h2>
             <p>Email: {modalUsuario.email}</p>
             <div className="modal-buttons">
-              <button className="styled-button">Ver Biblioteca</button>
+              <button
+                className="styled-button"
+                onClick={() => {
+                  // Guardar el amigo para mostrar el nombre en la otra vista (opcional)
+                  const amigos =
+                    JSON.parse(localStorage.getItem("amigos")) || [];
+                  if (
+                    !amigos.some(
+                      (a) => a.id_usuario === modalUsuario.id_usuario
+                    )
+                  ) {
+                    amigos.push(modalUsuario);
+                    localStorage.setItem("amigos", JSON.stringify(amigos));
+                  }
+
+                  // Redireccionar
+                  navigate(`/biblioteca-amigo/${modalUsuario.id_usuario}`);
+                }}
+              >
+                Ver Biblioteca
+              </button>
               <button
                 className="styled-button eliminar"
                 onClick={() => setConfirmDelete(modalUsuario.id_usuario)}

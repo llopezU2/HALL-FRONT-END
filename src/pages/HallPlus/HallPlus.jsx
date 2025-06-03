@@ -62,10 +62,19 @@ export default function HallPlus() {
   const cardType = detectCardType(card.numero);
 
   useEffect(() => {
-    api
-      .get("/suscripcion/tipos")
-      .then((res) => setPlanes(res.data))
-      .catch((err) => console.error("Error al cargar planes", err));
+    const fetchPlanesConSemana = async () => {
+      try {
+        const semanaRes = await api.get("/suscripcion/semana-actual");
+        const semana = semanaRes.data.semana;
+
+        const tiposRes = await api.get(`/suscripcion/tipos?semana=${semana}`);
+        setPlanes(tiposRes.data);
+      } catch (error) {
+        console.error("Error al cargar los planes con semana:", error);
+      }
+    };
+
+    fetchPlanesConSemana();
   }, []);
 
   const formatCardNumber = (number) => {

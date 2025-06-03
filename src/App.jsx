@@ -18,6 +18,7 @@ import Pago from "./pages/Pago/Pago";
 import JuegoAgg from "./pages/JuegoAgg/JuegoAgg";
 import HallPlus from "./pages/HallPlus/HallPlus";
 import AdminSuscripciones from "./pages/SuscripAdmin/AdminSuscripciones";
+import BibliotecaAmigo from "./pages/BibliotecaAmigo/BibliotecaAmigo";
 
 function App() {
   return (
@@ -55,6 +56,10 @@ function App() {
               <BibliotecaUsuario />
             </ProtectedRoute>
           }
+        />
+        <Route
+          path="/biblioteca-amigo/:idAmigo"
+          element={<BibliotecaAmigo />}
         />
         <Route
           path="/suscrip-usuario"

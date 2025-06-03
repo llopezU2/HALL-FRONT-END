@@ -20,8 +20,8 @@ export default function AdminSuscripciones() {
   }, []);
 
   const obtenerSemanaActual = async () => {
-    const res = await api.get("/configuracion");
-    setSemana(res.data.semana_global);
+    const res = await api.get("/suscripcion/semana-actual");
+    setSemana(res.data.semana);
   };
 
   useEffect(() => {
@@ -58,6 +58,24 @@ export default function AdminSuscripciones() {
     }
   };
 
+  const cambiarSemanaEnServidor = async () => {
+    try {
+      const res = await api.patch("/suscripcion/cambiar-semana", {
+        semana: semana,
+      });
+      setMensaje("Semana global actualizada correctamente.");
+      obtenerTipos(); // Refresca los juegos de esa semana
+    } catch (error) {
+      console.error("Error al actualizar la semana global:", error);
+      setMensaje("Error al actualizar la semana.");
+    }
+  };
+
+  useEffect(() => {
+    obtenerSemanaActual();
+    obtenerHistorial();
+  }, []);
+
   return (
     <div className="admin-wrapper">
       <div className="admin-content">
@@ -76,6 +94,9 @@ export default function AdminSuscripciones() {
                 min={1}
               />
             </label>
+            <button onClick={cambiarSemanaEnServidor}>
+              Aplicar Semana Global
+            </button>
             <button onClick={asignarJuegosSemana}>
               Asignar Juegos a Planes
             </button>
