@@ -63,3 +63,107 @@
   max-height: 80px;
   object-fit: contain;
 }
+/* En pantallas pequeñas oculta sidebar por defecto */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 2000;
+  }
+
+  /* Sidebar visible (clase activa) */
+  .admin-sidebar.active {
+    transform: translateX(0);
+    box-shadow: 2px 0 8px rgba(0,0,0,0.4);
+  }
+}
+
+/* Opcional: fondo oscuro al abrir el sidebar en móvil */
+.sidebar-overlay {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sidebar-overlay.active {
+    display: block;
+    position: fixed;
+    inset: 0; /* top:0; left:0; right:0; bottom:0 */
+    background: rgba(0,0,0,0.5);
+    z-index: 1500;
+  }
+}
+/* Sidebar fijo en escritorio */
+.admin-sidebar {
+  width: 220px;
+  background-color: #1e293b;
+  padding: 2rem 1rem;
+  color: white;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0; /* para que quede pegado arriba */
+  border-right: 1px solid #334155;
+  z-index: 1001;
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+}
+
+/* Contenido principal con margen para sidebar */
+.admin-content {
+  margin-left: 220px;
+  transition: margin-left 0.3s ease;
+  min-height: 100vh;
+}
+
+/* Para pantallas pequeñas: */
+@media (max-width: 768px) {
+  /* Sidebar oculto inicialmente con desplazamiento a la izquierda */
+  .admin-sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+    z-index: 2000;
+    height: 100vh;
+  }
+
+  /* Sidebar visible con clase activa */
+  .admin-sidebar.active {
+    transform: translateX(0);
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Contenido principal ocupa todo el ancho */
+  .admin-content {
+    margin-left: 0;
+  }
+
+  /* Botón hamburguesa visible en móvil */
+  .btn-toggle-sidebar {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    background: #1e293b;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 0.7rem;
+    z-index: 2100;
+    cursor: pointer;
+    font-size: 1.5rem;
+  }
+
+  /* Fondo oscuro para overlay cuando sidebar está abierto */
+  .sidebar-overlay {
+    display: none;
+  }
+  .sidebar-overlay.active {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1500;
+  }
+}
+

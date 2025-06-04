@@ -11,7 +11,6 @@ export default function AdminPanel() {
   const [newGame, setNewGame] = useState({
     titulo: "",
     descripcion: "",
-    precio: "",
     categoria: "",
   });
   const [newCategory, setNewCategory] = useState({
@@ -78,16 +77,13 @@ export default function AdminPanel() {
   // Submit Agregar Juego
   const handleGameSubmit = async (e) => {
     e.preventDefault();
-    const { titulo, descripcion, precio, categoria } = newGame;
-    if (!titulo || !descripcion || !precio || !categoria) {
+    const { titulo, descripcion, categoria } = newGame;
+    if (!titulo || !descripcion || !categoria) {
       return Swal.fire(
         "Error",
         "Completa todos los campos del juego",
         "warning"
       );
-    }
-    if (!isValidPrice(precio)) {
-      return alert("El precio del juego no es válido");
     }
     try {
       await api.post("/juego", {
@@ -173,14 +169,6 @@ export default function AdminPanel() {
                   value={newGame.descripcion}
                   onChange={(e) =>
                     setNewGame({ ...newGame, descripcion: e.target.value })
-                  }
-                />
-                <input
-                  type="text"
-                  placeholder="Precio"
-                  value={newGame.precio}
-                  onChange={(e) =>
-                    setNewGame({ ...newGame, precio: e.target.value })
                   }
                 />
                 <select

@@ -160,9 +160,7 @@ export default function JuegoAgg() {
                               <b>Categoría:</b>{" "}
                               {juego.categoria?.nombre || "Sin categoría"}
                             </span>
-                            <span>
-                              <b>Precio:</b> ${juego.precio}
-                            </span>
+                           
                           </div>
                           <div className="juegos-agg-card-actions">
                             <button
